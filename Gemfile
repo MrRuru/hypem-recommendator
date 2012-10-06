@@ -25,6 +25,11 @@ gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 
+# Embedded javascript template compiler
+gem 'ejs'
+
+# Twitter bootstrap generators with turbolink support
+gem 'twitter-bootstrap-turbo'
 
 # Puts a simple HTTP cache in front of your app (and gets you ready for later upgrading to nginx/varnish/squid)
 # gem 'rack-cache', '~> 1.2'
@@ -33,7 +38,7 @@ gem 'turbolinks'
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 # Build JSON APIs with ease. Read more: http://github.com/rails/jbuilder
-# gem 'jbuilder'
+gem 'jbuilder'
 
 # Use unicorn as the app server
 # gem 'unicorn'
@@ -42,4 +47,4 @@ gem 'turbolinks'
 # gem 'capistrano', group: :development
 
 # To use debugger
-# gem 'debugger'
+gem 'debugger'
