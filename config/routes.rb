@@ -1,12 +1,13 @@
 RecommandationApi::Application.routes.draw do
-  resources :categories
+
+  namespace :api do
+    resources :categories
+  end
+  
+  root to: 'application#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
-  # root to: 'welcome#index'
 
   # Sample of regular route:
   #   get 'products/:id' => 'catalog#view'

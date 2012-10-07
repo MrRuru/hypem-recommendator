@@ -7,6 +7,9 @@ gem 'rails', '4.0.0.beta'
 
 gem 'sqlite3'
 
+# Redis Database
+gem 'redis'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -48,3 +51,12 @@ gem 'jbuilder'
 
 # To use debugger
 gem 'debugger'
+
+# Recommendation engine
+gem 'recommendify'
+
+# Testing
+group :test do
+  gem 'rspec'
+  gem 'rspec-rails'
+end
