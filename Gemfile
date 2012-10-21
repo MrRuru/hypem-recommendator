@@ -65,7 +65,7 @@ gem 'jbuilder'
 gem 'debugger'
 
 # Recommendation engine
-gem 'recommendify'
+# gem 'recommendify'
 
 # Hypem API
 gem 'hypem'
