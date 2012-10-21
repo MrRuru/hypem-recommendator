@@ -50,6 +50,14 @@ class Song < RedisRecord
     Resque.enqueue(Crawler, "song", self.id, depth, force)
   end
 
+  def recommendations_exist?
+    !!recommendations
+  end
+  
+  def recommendations_expired?
+    recommendations_built_at && ( Time.parse(recommendations_built_at) > Time.now - EXPIRE_AFTER )
+  end
+  
   def build_recommendations!
     Resque.enqueue(Recommender, self.id)
   end

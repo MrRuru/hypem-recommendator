@@ -1,4 +1,6 @@
 class Crawler
+  include Resque::Plugins::UniqueJob
+
   @queue = :crawling
   
   def self.logger

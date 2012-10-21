@@ -1,4 +1,6 @@
 class Recommender
+  include Resque::Plugins::UniqueJob
+
   @queue = :recommending
   
   def self.logger

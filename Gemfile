@@ -10,6 +10,7 @@ gem 'redis'
 
 # Resque tasks
 gem 'resque'
+gem 'resque-loner'
 
 # Gems used only for assets and not required
 # in production environments by default.

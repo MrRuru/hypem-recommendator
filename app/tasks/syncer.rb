@@ -1,4 +1,6 @@
 class Syncer
+  include Resque::Plugins::UniqueJob
+
   @queue = :syncing
 
   def self.logger
