@@ -1,17 +1,16 @@
 source 'https://rubygems.org'
 
-# gem 'activesupport', '4.0.0.beta', :require => 'activesupport-4.0.0.beta'
-
-gem 'activesupport', '~> 4.0.0.beta'
-gem 'actionpack', '~> 4.0.0.beta'
-# gem 'activerecord', '~> 4.0.0.beta'
-gem 'actionmailer', '~> 4.0.0.beta'
-gem 'railties', '~> 4.0.0.beta'
-gem 'bundler', '~> 1.2'
-# gem 'sprockets-rails', '~> 2.0.0.rc1'
+# gem 'activesupport', '~> 4.0.0.beta'
+# gem 'actionpack', '~> 4.0.0.beta'
+# # gem 'activerecord', '~> 4.0.0.beta'
+# gem 'actionmailer', '~> 4.0.0.beta'
+# gem 'railties', '~> 4.0.0.beta'
+# gem 'bundler', '~> 1.2'
+# # gem 'sprockets-rails', '~> 2.0.0.rc1'
 
 # Bundle edge Rails instead:
 # gem 'rails', github: 'rails/rails'
+gem 'rails', ' ~> 3.2.8'
 
 # Redis cache
 gem 'redis'
@@ -23,9 +22,11 @@ gem 'resque-loner'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sprockets-rails', ' ~> 1.0'
-  gem 'sass-rails',   '~> 4.0.0.beta'
-  gem 'coffee-rails', '~> 4.0.0.beta'
+  # gem 'sprockets-rails', ' ~> 1.0'
+  # gem 'sass-rails',   '~> 4.0.0.beta'
+  # gem 'coffee-rails', '~> 4.0.0.beta'
+  gem "sass-rails"
+  gem "coffee-rails"
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', platforms: :ruby
