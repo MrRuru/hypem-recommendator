@@ -64,8 +64,8 @@ gem 'jbuilder'
 # To use debugger
 gem 'debugger'
 
-# Recommendation engine
-gem 'recommendify'
+# Recommendation engine, the one with the native extension building disabled
+gem 'recommendify', :github => 'lemmycaution/recommendify'
 
 # Hypem API
 gem 'hypem'
