@@ -5,10 +5,11 @@ gem 'rails', '4.0.0.beta'
 # Bundle edge Rails instead:
 # gem 'rails', github: 'rails/rails'
 
-gem 'sqlite3'
-
-# Redis Database
+# Redis cache
 gem 'redis'
+
+# Resque tasks
+gem 'resque'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -54,6 +55,9 @@ gem 'debugger'
 
 # Recommendation engine
 gem 'recommendify'
+
+# Hypem API
+gem 'hypem'
 
 # Testing
 group :test do

@@ -1,10 +1,11 @@
+require 'resque/server'
+
 RecommandationApi::Application.routes.draw do
 
-  namespace :api do
-    resources :categories
-  end
-  
+  mount Resque::Server.new, :at => "/resque"
+
   root to: 'application#index'
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
