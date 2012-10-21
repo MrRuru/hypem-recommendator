@@ -1,4 +1,4 @@
-RecommandatorApp = 
+RecommendatorApp = 
   Models: {},
   Collections: {},
   Views: {},

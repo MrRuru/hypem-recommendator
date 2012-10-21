@@ -20,7 +20,7 @@
 //
 //= require turbolinks
 //
-//= require recommandation_app
+//= require recommendator_app
 //
 //= require_tree ./models
 //= require_tree ./collections

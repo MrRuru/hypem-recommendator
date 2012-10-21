@@ -34,4 +34,8 @@ RecommandationApi::Application.configure do
 
   # Debug mode disables concatenation and preprocessing of assets.
   config.assets.debug = true
+  
+  # Define private data for development
+  ENV['ADMIN_LOGIN'] = 'admin'
+  ENV['ADMIN_PASSWORD'] = 'admin'
 end

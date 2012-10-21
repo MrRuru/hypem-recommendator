@@ -11,7 +11,9 @@ class Song < RedisRecord
                  :crawl_depth, 
                  :recommended_at, 
                  :recommendations,
-                 :recommendations_built_at
+                 :recommendations_built_at,
+                 :artist,
+                 :title
 
   has_associated :favorites
 
@@ -51,5 +53,5 @@ class Song < RedisRecord
   def build_recommendations!
     Resque.enqueue(Recommender, self.id)
   end
-    
+  
 end

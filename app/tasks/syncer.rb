@@ -15,12 +15,15 @@ class Syncer
       song = Song.new(id)
 
       begin
+        song.hypem.get
         user_ids = song.hypem.favorites.get.users.map{|user|user.name}
       rescue => e
         logger.error "Error syncing song #{id} : #{e}"
         return
       end
       
+      song.artist = song.hypem.artist
+      song.title = song.hypem.title
       song.favorites.sadd(user_ids)
       song.synced_at = Time.now
     

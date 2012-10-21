@@ -6,6 +6,13 @@ RecommandationApi::Application.routes.draw do
 
   root to: 'application#index'
 
+  namespace :api do
+    resources :songs, :only => :show do
+      member do
+        get :recommendations
+      end
+    end
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
