@@ -13,6 +13,7 @@ source 'https://rubygems.org'
 gem 'rails', ' ~> 3.2.8'
 
 # Redis cache
+gem 'hiredis'
 gem 'redis'
 
 # Resque tasks

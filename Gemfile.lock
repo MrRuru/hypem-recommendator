@@ -53,6 +53,7 @@ GEM
     execjs (1.4.0)
       multi_json (~> 1.0)
     hike (1.2.1)
+    hiredis (0.4.5)
     httparty (0.9.0)
       multi_json (~> 1.0)
       multi_xml
@@ -173,6 +174,7 @@ DEPENDENCIES
   coffee-rails
   debugger
   ejs
+  hiredis
   hypem
   jbuilder
   jquery-rails
