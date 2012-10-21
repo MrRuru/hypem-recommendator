@@ -1,7 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'activesupport', '4.0.0.beta', :require => 'activesupport-4.0.0.beta'
-gem 'rails', '4.0.0.beta'
+# gem 'activesupport', '4.0.0.beta', :require => 'activesupport-4.0.0.beta'
+
+gem 'activesupport', '~> 4.0.0.beta'
+gem 'actionpack', '~> 4.0.0.beta'
+# gem 'activerecord', '~> 4.0.0.beta'
+gem 'actionmailer', '~> 4.0.0.beta'
+gem 'railties', '~> 4.0.0.beta'
+gem 'bundler', '~> 1.2'
+# gem 'sprockets-rails', '~> 2.0.0.rc1'
 
 # Bundle edge Rails instead:
 # gem 'rails', github: 'rails/rails'
@@ -16,7 +23,7 @@ gem 'resque-loner'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sprockets-rails', github: 'rails/sprockets-rails'
+  gem 'sprockets-rails', ' ~> 1.0'
   gem 'sass-rails',   '~> 4.0.0.beta'
   gem 'coffee-rails', '~> 4.0.0.beta'
 
