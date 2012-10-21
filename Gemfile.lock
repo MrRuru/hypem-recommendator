@@ -173,7 +173,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport
+  activesupport (= 4.0.0.beta)
   coffee-rails (~> 4.0.0.beta)
   debugger
   ejs
