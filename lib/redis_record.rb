@@ -20,7 +20,7 @@ class RedisRecord
   private
 
   def redis
-    @@redis ||= Redis.new
+    @@redis ||= REDIS
   end
 
 
