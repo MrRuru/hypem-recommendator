@@ -8,7 +8,7 @@ class SongRecommender < Recommendify::Base
   # "customers that ordered item i1 also ordered item i2" statement and apply
   # the result to the item<->item similarity matrix with a weight of 5.0
   input_matrix :playlists,  
-    :native => true,
+    # :native => true,
     :similarity_func => :jaccard,    
     :weight => 5.0
       
