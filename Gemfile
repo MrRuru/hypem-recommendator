@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'activesupport', '4.0.0.beta'
 gem 'rails', '4.0.0.beta'
 
 # Bundle edge Rails instead:
