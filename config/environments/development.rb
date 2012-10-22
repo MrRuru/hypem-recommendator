@@ -34,9 +34,9 @@ RecommandationApi::Application.configure do
 
   # Debug mode disables concatenation and preprocessing of assets.
   config.assets.debug = true
-  
+
   # Define private data for development
   ENV['ADMIN_LOGIN'] = 'admin'
   ENV['ADMIN_PASSWORD'] = 'admin'
-  ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379' 
+    
 end
