@@ -1,3 +1,5 @@
+ENV["REDISTOGO_URL"] = 'redis://127.0.0.1:6379' 
+
 RecommandationApi::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -35,5 +37,5 @@ RecommandationApi::Application.configure do
   config.active_support.deprecation = :stderr
 
   # Use the testing queue.
-  config.queue = ActiveSupport::TestQueue
+  # config.queue = ActiveSupport::TestQueue
 end

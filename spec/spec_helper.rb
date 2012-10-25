@@ -14,7 +14,7 @@ RSpec::configure do |c|
   c.backtrace_clean_patterns << /lib\/rspec\/rails/
 end
 
-# require 'rspec/rails/extensions'
+require 'rspec/rails/extensions'
 require 'rspec/rails/view_rendering'
 require 'rspec/rails/adapters'
 require 'rspec/rails/matchers'
@@ -61,3 +61,6 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+# User factory girl for fixtures
+# FactoryGirl.find_definitions

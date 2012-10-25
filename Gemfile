@@ -74,4 +74,6 @@ gem 'hypem'
 group :test do
   gem 'rspec'
   gem 'rspec-rails'
+  gem 'resque_spec'
+  gem "factory_girl_rails", "~> 4.0"
 end

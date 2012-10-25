@@ -8,7 +8,15 @@ class Syncer
   end
       
 
-  def self.perform(type, id)
+  def self.perform(opts = {})
+    
+    type = opts["type"]
+    id = opts["id"]
+    
+    unless type && id
+      logger.error "Type and id must be defined" unless type && id
+      return
+    end
     
     if type == "song"
       
