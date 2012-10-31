@@ -27,8 +27,11 @@ describe Syncer do
       @song.hypem.favorites.stub(:get).and_return(@song.hypem.favorites)
       @song.hypem.favorites.should_receive(:get)
 
-      @song.hypem.favorites.stub(:users).and_return(Object.new)
+      @song.hypem.favorites.stub(:users).and_return([])
       @song.hypem.favorites.should_receive(:users)
+
+      @song.hypem.stub(:artist).and_return(random_string)
+      @song.hypem.stub(:title).and_return(random_string)
 
       Syncer.perform({:type => type, :id => id})
     end

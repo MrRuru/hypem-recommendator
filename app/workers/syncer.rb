@@ -43,7 +43,7 @@ class Syncer
       
       song.artist = song.hypem.artist
       song.title = song.hypem.title
-      song.favorites.sadd(user_ids)
+      song.favorites.sadd(user_ids) unless user_ids.blank?
       song.synced_at = Time.now
     
     elsif type == "user"
