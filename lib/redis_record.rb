@@ -8,7 +8,7 @@ class RedisRecord
   end
   
   def key
-    [@class_name, @id].join('_')
+    [@class_name, @id].join(':')
   end
   
   [:sadd, :smembers, :exists, :hget, :hset].each do |redis_method|
@@ -43,7 +43,7 @@ class RedisRecord
     fields.each do |field_id|
       
       define_method "#{field_id}" do
-        return RedisRecord.new([@id, field_id].join('_'), :class_name => @class_name)
+        return RedisRecord.new([@id, field_id].join(':'), :class_name => @class_name)
       end
       
     end

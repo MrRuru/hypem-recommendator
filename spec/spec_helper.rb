@@ -60,6 +60,17 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  # Clearing the data before each spec
+  config.before :each do
+    REDIS.flushall
+    ResqueSpec.reset!
+  end
+
+end
+
+def random_string
+  rand(36 ** 5 - 1).to_s(36).rjust(5, "0")
 end
 
 # User factory girl for fixtures

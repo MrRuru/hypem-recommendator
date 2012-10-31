@@ -1,6 +1,11 @@
 class Syncer
   include Resque::Plugins::UniqueJob
 
+  def self.raise_error(type, message)
+    logger.error(message)
+    raise type, message
+  end
+
   @queue = :syncing
 
   def self.logger
@@ -10,16 +15,20 @@ class Syncer
 
   def self.perform(opts = {})
     
-    type = opts["type"]
-    id = opts["id"]
-    
+    type = opts[:type]
+    id = opts[:id]
+
     unless type && id
-      logger.error "Type and id must be defined" unless type && id
-      return
+      raise_error(ArgumentError, "Type and id must be defined")
     end
-    
-    if type == "song"
+
+    unless ["song", "user"].include?(type)
+      raise_error(ArgumentError, "Type must be 'user' or 'song', not '#{type}'")
+    end
       
+
+    if type == "song"
+            
       logger.info "Syncing song #{id}"
       
       song = Song.new(id)
@@ -29,7 +38,7 @@ class Syncer
         user_ids = song.hypem.favorites.get.users.map{|user|user.name}
       rescue => e
         logger.error "Error syncing song #{id} : #{e}"
-        return
+        throw "Error syncing song #{id} : #{e}"
       end
       
       song.artist = song.hypem.artist
@@ -47,7 +56,7 @@ class Syncer
         song_ids = user.hypem.loved_playlist.get.tracks.map{|song|song.media_id}
       rescue => e
         logger.error "Error syncing user #{id} : #{e}"
-        return
+        throw "Error syncing user #{id} : #{e}"
       end
 
       user.playlist.sadd(song_ids)
