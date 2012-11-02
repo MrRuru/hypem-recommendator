@@ -73,5 +73,10 @@ def random_string
   rand(36 ** 5 - 1).to_s(36).rjust(5, "0")
 end
 
+def random_array
+  Array.new(rand(10)+1).map!{random_string}
+end
+
+
 # User factory girl for fixtures
 # FactoryGirl.find_definitions

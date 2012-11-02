@@ -7,7 +7,9 @@ describe Syncer do
 
   describe "with an unsynced songs" do
 
-    let(:song) {}
+    let(:artist){random_string}
+    let(:title){random_string}
+    let(:user_names){random_array}
 
     before(:each) do
       # Control what's happening to the song in the syncer
@@ -37,17 +39,25 @@ describe Syncer do
     end
       
       
-    it "should process the hypem data" do
-      @song.stub_chain(:hypem, :get).and_return("foobar")
-      @song.stub_chain(:hypem, :favorites, :get,  :users).and_return("foobarbar")
+    it "should process the hypem data" do      
+      @song.stub_chain(:hypem, :get)
+      @song.stub_chain(:hypem, :artist).and_return(artist)
+      @song.stub_chain(:hypem, :title).and_return(title)
+        
+      @song
+        .stub_chain(:hypem, :favorites, :get, :users, :map)
+        .and_return( user_names )
 
       Syncer.perform({:type => type, :id => id})
       
-      @song.artist.should == "artist"
+      @song.artist.should == artist      
+      @song.title.should == title
+      @song.synced_at.should_not be_nil
+      @song.synced?.should be_true
+
+      @song.favorites.smembers.should =~ user_names
     end
         
-    
-    
   end
   
 
@@ -78,7 +88,7 @@ describe Syncer do
     end
     
     it "should handle hype machine exceptions" do
-      
+      pending "update hypem gem before"
     end
     
   end
