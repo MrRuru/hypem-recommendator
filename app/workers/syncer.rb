@@ -15,8 +15,8 @@ class Syncer
 
   def self.perform(opts = {})
     
-    type = opts[:type]
-    id = opts[:id]
+    type = opts["type"]
+    id = opts["id"]
 
     unless type && id
       raise_error(ArgumentError, "Type and id must be defined")

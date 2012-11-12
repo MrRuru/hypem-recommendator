@@ -32,7 +32,7 @@ class User < RedisRecord
   end
   
   def sync!
-    Resque.enqueue(Syncer, {"type" => "user", "id" => "self.id"})
+    Resque.enqueue(Syncer, {"type" => "user", "id" => self.id})
   end
   
   def crawled?(depth = DEFAULT_CRAWL_DEPTH)
