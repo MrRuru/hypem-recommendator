@@ -1,0 +1,132 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.hypem.com/playlist/item/1mahm/json/1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - text/html
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.2.3
+      Date:
+      - Thu, 15 Nov 2012 00:45:13 GMT
+      Content-Type:
+      - text/javascript; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - timeout=10
+      Set-Cookie:
+      - AUTH=03%3Af2bb7aa42ae8e25eeff4419c1d78c66d%3A1352940313%3A1391139757%3AA8-FR;
+        expires=Sat, 11-Nov-2028 00:45:13 GMT; path=/; domain=hypem.com
+      X-Hacker:
+      - Hey, if you're reading this, you should drop us an email at hypem.com/contact,
+        maybe we can work together!
+      Access-Control-Allow-Origin:
+      - ! '*'
+      Access-Control-Allow-Headers:
+      - ! '*'
+    body:
+      encoding: US-ASCII
+      string: ! '{"version":"1.1","0":{"mediaid":"1mahm","artist":"Soko","title":"I''ll
+        Kill Her (Hannes Fischer Remix)","dateposted":1352906938,"siteid":6825,"sitename":"CHROMEMUSIC","posturl":"http:\/\/www.chromemusic.de\/music\/soko-i-kill-her-hannes-fischer-remix\/","postid":1996677,"loved_count":2395,"posted_count":6,"thumb_url":"http:\/\/static-ak.hypem.net\/thumbs_new\/85\/1996677.png","thumb_url_medium":"http:\/\/static-ak.hypem.net\/thumbs_new\/85\/1996677_120.png","thumb_url_large":"http:\/\/static-ak.hypem.net\/thumbs_new\/85\/1996677_320.png","thumb_url_artist":null,"time":348,"description":"Beautiful
+        house remix of Soko\u2019s \u201cI\u2019ll Kill Her\u201d by Hannes Fischer,
+        who\u2019s going to play @ Yip Yab on December 28th. I Kill Her (Hannes Fischer
+        Remix)","tags":["indie","french","female vocalist","singer-songwriter","pop"],"itunes_link":"http:\/\/hypem.com\/go\/itunes_search\/Soko"},"1":{"mediaid":"8v0p","artist":"Soko","title":"I''ll
+        Kill Her","dateposted":1320345281,"siteid":11067,"sitename":"EARMILK","posturl":"http:\/\/www.earmilk.com\/2011\/11\/03\/soko-i-thought-i-was-an-alien-video\/","postid":1630420,"loved_count":4373,"posted_count":33,"thumb_url":"http:\/\/static-ak.hypem.net\/thumbs_new\/d4\/1630420.png","thumb_url_medium":"http:\/\/static-ak.hypem.net\/thumbs_new\/d4\/1630420_120.png","thumb_url_large":"http:\/\/static-ak.hypem.net\/thumbs_new\/e2\/1615842_320.png","thumb_url_artist":null,"time":232,"description":"Directed
+        by herself, Soko, a delicate french singer-songwriter, has a new music video.
+        This video is also the title track of her forthcoming album I Thought I Was
+        An Alien. Besides how cute she is, \u201cI Thought I Was An Alien\u201d is
+        filled with dry humorous li","tags":["french","indie","female vocalist","cute","pop","singer-songwriter","indie
+        pop","acoustic","funny","melancholic"],"itunes_link":"http:\/\/hypem.com\/go\/itunes_search\/Soko"}}'
+    http_version: 
+  recorded_at: Thu, 15 Nov 2012 00:45:12 GMT
+- request:
+    method: get
+    uri: http://hypem.com/inc/serve_activity_info.php?id=1mahm&limit=20&skip=0&ts=1352940312&type=favorites
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - text/html
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx/1.2.3
+      Date:
+      - Thu, 15 Nov 2012 00:45:14 GMT
+      Content-Type:
+      - text/html; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - timeout=10
+    body:
+      encoding: US-ASCII
+      string: ! '<div class="favcountlist"><div class="close-this"></div><h4>Loved
+        By</h4><ul><li ><a  href="/sdubbs"><img src=''http://faces-s3.hypem.com/429099650282183_75.png''
+        class="avatar-s" width="30" height="30" title=''sdubbs loved this 11 mins
+        ago''/> <span>sdubbs</span></a><li ><a  href="/missvu"><img src=''http://faces-s3.hypem.com/144348638603605_75.png''
+        class="avatar-s" width="30" height="30" title=''missvu loved this 38 mins
+        ago''/> <span>missvu</span></a><li ><a  href="/itsbhaji"><img src=''http://faces-s3.hypem.com/762381803133612_75.png''
+        class="avatar-s" width="30" height="30" title=''itsbhaji loved this 38 mins
+        ago''/> <span>itsbhaji</span></a><li ><a  href="/JanaVGK"><img src=''http://faces-s3.hypem.com/1275577518684939_75.png''
+        class="avatar-s" width="30" height="30" title=''JanaVGK loved this 43 mins
+        ago''/> <span>JanaVGK</span></a><li ><a  href="/bws81"><img src=''http://faces-s3.hypem.com/5211231652553151_75.png''
+        class="avatar-s" width="30" height="30" title=''bws81 loved this 46 mins ago''/>
+        <span>bws81</span></a><li ><a  href="/Piiiem"><img src=''http://faces-s3.hypem.com/10997801897950709_75.png''
+        class="avatar-s" width="30" height="30" title=''Piiiem loved this 53 mins
+        ago''/> <span>Piiiem</span></a><li ><a  href="/travelling"><img src=''http://faces-s3.hypem.com/2586991270969119_75.png''
+        class="avatar-s" width="30" height="30" title=''travelling loved this an hour
+        ago''/> <span>travelling</span></a><li ><a  href="/amygo"><img src=''http://faces-s3.hypem.com/128676264166476_75.png''
+        class="avatar-s" width="30" height="30" title=''amygo loved this an hour ago''/>
+        <span>amygo</span></a><li ><a  href="/tobi_dragon"><img src=''http://faces-s3.hypem.com/1215094656089965_75.png''
+        class="avatar-s" width="30" height="30" title=''tobi_dragon loved this nearly
+        2 hrs ago''/> <span>tobi_dragon</span></a><li ><a  href="/artorius"><img src=''http://faces-s3.hypem.com/11533461533175320_75.png''
+        class="avatar-s" width="30" height="30" title=''artorius loved this nearly
+        2 hrs ago''/> <span>artorius</span></a><li ><a  href="/ElectricEclectic"><img
+        src=''http://faces-s3.hypem.com/433619157802588_75.png'' class="avatar-s"
+        width="30" height="30" title=''ElectricEclectic loved this 2 hrs ago''/> <span>ElectricEclectic</span></a><li
+        ><a  href="/hotshowers"><img src=''http://faces-s3.hypem.com/5742052048317221_75.png''
+        class="avatar-s" width="30" height="30" title=''hotshowers loved this 3 hrs
+        ago''/> <span>hotshowers</span></a><li ><a  href="/tangowithlions"><img src=''http://faces-s3.hypem.com/1302027739043051_75.png''
+        class="avatar-s" width="30" height="30" title=''tangowithlions loved this
+        3 hrs ago''/> <span>tangowithlions</span></a><li ><a  href="/zuccakathi"><img
+        src=''http://faces-s3.hypem.com/8105051707742629_75.png'' class="avatar-s"
+        width="30" height="30" title=''zuccakathi loved this 3 hrs ago''/> <span>zuccakathi</span></a><li
+        ><a  href="/JVArgas"><img src=''http://faces-s3.hypem.com/11553611434370492_75.png''
+        class="avatar-s" width="30" height="30" title=''JVArgas loved this 3 hrs ago''/>
+        <span>JVArgas</span></a><li ><a  href="/StrangeMachine"><img src=''http://faces-s3.hypem.com/197338391033254_75.png''
+        class="avatar-s" width="30" height="30" title=''StrangeMachine loved this
+        3 hrs ago''/> <span>StrangeMachine</span></a><li ><a  href="/cheriths"><img
+        src=''http://faces-s3.hypem.com/8487851343815225_75.png'' class="avatar-s"
+        width="30" height="30" title=''cheriths loved this 3 hrs ago''/> <span>cheriths</span></a><li
+        ><a  href="/mrtz"><img src=''http://faces-s3.hypem.com/8659711273546160_75.png''
+        class="avatar-s" width="30" height="30" title=''mrtz loved this 4 hrs ago''/>
+        <span>mrtz</span></a><li ><a  href="/Kamuy"><img src=''http://faces-s3.hypem.com/6258181599579188_75.png''
+        class="avatar-s" width="30" height="30" title=''Kamuy loved this 4 hrs ago''/>
+        <span>Kamuy</span></a><li ><a  href="/evgenia"><img src=''http://faces-s3.hypem.com/1293580635859544_75.png''
+        class="avatar-s" width="30" height="30" title=''evgenia loved this 6 hrs ago''/>
+        <span>evgenia</span></a></ul><a href="" onclick="update_item_activity(''favorites'',
+        ''1mahm'', ''20'', ''20''); return false;" class="fav-paging">Next 20 &raquo;</a><script
+        type="text/javascript">jQuery(".avatar-s img[title]").tooltip({ position:
+        "top center", offset: [-2,0]});</script></div>'
+    http_version: 
+  recorded_at: Thu, 15 Nov 2012 00:45:12 GMT
+recorded_with: VCR 2.2.5

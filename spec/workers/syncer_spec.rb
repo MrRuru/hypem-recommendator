@@ -2,9 +2,10 @@ require 'spec_helper'
 
 describe Syncer do
   
-  let(:id) {random_string}
+  # let(:id) {random_string}
+  let(:id){ "1mahm" }
   let(:type) {"song"}
-
+  
   describe "with an unsynced songs" do
 
     let(:artist){random_string}
@@ -35,7 +36,7 @@ describe Syncer do
       @song.hypem.stub(:artist).and_return(random_string)
       @song.hypem.stub(:title).and_return(random_string)
 
-      Syncer.perform({"type" => type, "id" => id})
+      Syncer.perform({:type => type, :id => id})
     end
       
       
@@ -48,7 +49,7 @@ describe Syncer do
         .stub_chain(:hypem, :favorites, :get, :users, :map)
         .and_return( user_names )
 
-      Syncer.perform({"type" => type, "id" => id})
+      Syncer.perform({:type => type, :id => id})
       
       @song.artist.should == artist      
       @song.title.should == title
@@ -69,10 +70,42 @@ describe Syncer do
   
   describe "callbacks" do
     
+    let(:callback_type) { Crawler }
+    let(:callback_args) { { :type => type, :id => id, :depth => 1 } }
     
+    it "should run the callback after successful execution" do
+
+      # Fetching the last request date, so the timestamp in the request match,
+      # and VCR doesn't try to fetch a new episode
+      # When fixture needing to be recorded, using current time
+      if VCR::Cassette.new("track").serializable_hash.values.first.empty?
+        @last_request_time = Time.now
+      else
+        @last_request_time = VCR::Cassette.new("track").serializable_hash.values.first.last["recorded_at"]
+      end
+      
+      Timecop.freeze(@last_request_time) do
+
+        VCR.use_cassette("track") do
+          Syncer.perform({:type => type, :id => id, :callback => {:type => callback_type, :args => callback_args}})
+        end
+        
+      end
+      
+      Crawler.should have_queue_size_of(1)
+      Crawler.should have_queued(callback_args)
+    end
+    
+    # Maybe to spec only for crawler / recommander
+    it "should forward its callback to children on failed execution" do
+      pending "add specs"
+    end
   end
   
-  
+
+  describe "unique queues" do
+    pending "add spec"
+  end
   
 
   describe "error cases" do
@@ -82,9 +115,9 @@ describe Syncer do
       bad_type.should_not == "song"
       bad_type.should_not == "user"
       
-      lambda{ Syncer.perform({"type" => bad_type, "id" => id}) }.should raise_error(ArgumentError, "Type must be 'user' or 'song', not '#{bad_type}'")
-      lambda{ Syncer.perform({"type" => type}) }.should raise_error(ArgumentError, /Type and id must be defined/)
-      lambda{ Syncer.perform({"id" => id}) }.should raise_error(ArgumentError, /Type and id must be defined/)
+      lambda{ Syncer.perform({:type => bad_type, "id" => id}) }.should raise_error(ArgumentError, "Type must be 'user' or 'song', not '#{bad_type}'")
+      lambda{ Syncer.perform({:type => type}) }.should raise_error(ArgumentError, /Type and id must be defined/)
+      lambda{ Syncer.perform({:id => id}) }.should raise_error(ArgumentError, /Type and id must be defined/)
     end
     
     it "should handle hype machine exceptions" do

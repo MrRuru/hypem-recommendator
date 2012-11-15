@@ -13,21 +13,33 @@ class Syncer
   end
       
 
-  def self.perform(opts = {})
+  def self.perform(args = {})
     
-    type = opts["type"]
-    id = opts["id"]
-
-    unless type && id
+    opts = args.symbolize_keys
+    
+    unless opts[:type] && opts[:id]
       raise_error(ArgumentError, "Type and id must be defined")
     end
 
-    unless ["song", "user"].include?(type)
+    type = opts[:type].to_sym
+    id = opts[:id]
+    
+    if opts[:callback]
+      callback_opts = opts[:callback].symbolize_keys
+      callback_type = callback_opts[:type]
+      callback_args = callback_opts[:args].symbolize_keys
+      callback = Proc.new {
+        Resque.enqueue(callback_type, callback_args)
+      }      
+    end
+
+
+    unless [:song, :user].include?(type)
       raise_error(ArgumentError, "Type must be 'user' or 'song', not '#{type}'")
     end
       
 
-    if type == "song"
+    if type == :song
             
       logger.info "Syncing song #{id}"
       
@@ -46,7 +58,7 @@ class Syncer
       song.favorites.sadd(user_ids) unless user_ids.blank?
       song.synced_at = Time.now
     
-    elsif type == "user"
+    elsif type == :user
       
       logger.info "Syncing user #{id}"
 
@@ -61,6 +73,11 @@ class Syncer
 
       user.playlist.sadd(song_ids)
       user.synced_at = Time.now
+    end
+    
+    # Enqueuing the callback if there is one
+    if callback
+      callback.call
     end
       
   end
