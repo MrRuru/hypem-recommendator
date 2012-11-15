@@ -1,0 +1,153 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api.hypem.com/playlist/item/badid/json/1
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - text/html
+  response:
+    status:
+      code: 301
+      message: Moved Permanently
+    headers:
+      Server:
+      - nginx/1.2.3
+      Date:
+      - Thu, 15 Nov 2012 01:39:00 GMT
+      Content-Type:
+      - text/html; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - timeout=10
+      Set-Cookie:
+      - AUTH=03%3A00b1147a7b962dcdf25c4fa612611e2c%3A1352943540%3A1391139757%3AA8-FR;
+        expires=Sat, 11-Nov-2028 01:39:00 GMT; path=/; domain=hypem.com
+      X-Hacker:
+      - Hey, if you're reading this, you should drop us an email at hypem.com/contact,
+        maybe we can work together!
+      Location:
+      - /track/
+    body:
+      encoding: US-ASCII
+      string: ''
+    http_version: 
+  recorded_at: Thu, 15 Nov 2012 01:39:00 GMT
+- request:
+    method: get
+    uri: http://api.hypem.com/track/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - text/html
+      Cookie:
+      - AUTH=03%3A00b1147a7b962dcdf25c4fa612611e2c%3A1352943540%3A1391139757%3AA8-FR
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx/1.2.3
+      Date:
+      - Thu, 15 Nov 2012 01:39:01 GMT
+      Content-Type:
+      - text/html
+      Content-Length:
+      - '6773'
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - timeout=10
+    body:
+      encoding: US-ASCII
+      string: ! "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"
+        \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n<html xmlns=\"http://www.w3.org/1999/xhtml\"
+        xml:lang=\"en\" lang=\"en\"><head><meta http-equiv=\"Content-Type\" content=\"text/html;
+        charset=UTF-8\">\n\n<title>Error 404: Not Found</title>\n\n<link rel=\"icon\"
+        href=\"http://static.hypem.net/favicon.ico\" type=\"image/x-icon\">\n<link
+        rel=\"shortcut icon\" href=\"http://static.hypem.net/favicon.ico\" type=\"image/x-icon\">\n\n<style
+        type=\"text/css\">\n* { margin: 0; padding: 0; outline: 0; font-weight: inherit;
+        font-size: 100%; font-family: inherit; vertical-align: baseline; }\nol, ul
+        { list-style: none; zoom: 1;}\ntable { border-collapse: separate; border-spacing:
+        0; }\ncaption, th, td { text-align: left; font-weight: normal; }\nblockquote:before,
+        blockquote:after { content: \"\"; }\nblockquote, q { quotes: \"\" \"\"; }\n/*i
+        { font-style: normal; }*/\n.clearfix:after { content: \".\"; display: block;
+        clear: both; visibility: hidden; line-height: 0; height: 0; }\n.clearfix {
+        display: inline-block; }\nhtml[xmlns] .clearfix { display: block; }\n* html
+        .clearfix { height: 1%; }\n\nbody {\n    background: #FFF;\n    color: #111;\n
+        \   font-size: 11px;\n    font-family: 'Helvetica', 'Arial', sans-serif;\n
+        \   position: relative;\n    width: 100%;\n}\n\na {\n    color: #0063dc;\n
+        \   text-decoration: none;\n}\n\na:hover {\n    text-decoration: underline;\n}\n\n#content-wrapper
+        {\n    overflow: hidden;\n    padding-top: 0px;\n}\n\n#header {\n    background-color:
+        #83c441;\n    height: 42px;\n    margin-bottom: 0px;\n    position: relative;\n
+        \   text-align: right;\n    z-index: 100;\n}\n\n#header-inner {\n    margin:
+        0 auto;\n    position: relative;\n    width: 980px;\n}\n\n#logo {\n    border:
+        0;\n    background: url(http://static.hypem.net/images/logo.png) left bottom
+        no-repeat;\n    color: #000;\n    cursor: pointer;\n    display: block;\n
+        \   float: left;\n    font-size: 38px;\n    font-weight: 700;\n    height:
+        28px;\n    line-height: 1em;\n    overflow: visible;\n    margin-right: 24px;\n
+        \   position: relative;\n    text-align: left;\n    top: 7px;\n    width:
+        222px;\n}\n\n#logo:hover {\n    background-position: left top;\n}\n\n#header
+        .menu {\n    float: left;\n    height: 42px;\n}\n\n#header .menu li {\n    color:
+        #ddd;\n    display: block;\n    float: left;\n    height: 42px;\n}\n\n#header
+        .menu li a {\n    display: block;\n    float: left;\n    font-size: 13px;\n
+        \   font-weight: bold;\n    height: 100%;\n    padding: 0 12px;\n    text-align:
+        center;\n    text-decoration: none;\n    color: #000;\n    line-height: 42px;\n}\n\n/*
+        menu hover */\n#header .menu li:hover a,\n#footer .menu li:hover a {\n    background:
+        #111;\n    color: #e0e0e0;\n}\n\n#header .menu li span {\n    float: left;\n
+        \   line-height: 28px;\n}\n\n\n#header .menu #menu-item-back {\n    display:none;\n}\n\n\n\n\n#message
+        {\nmargin: 0 auto;\nwidth: 980px;\nfloat:none;\n}\n\n#message h1 {\nfont-size:30px;\npadding:
+        42px 0 42px 0;\nmargin-left: 0px;\nfont-weight: 700;\n}\n\n\n\n#container
+        {\n    margin: 0 auto;\n    position: relative;\n    width: 980px;\n    display:
+        block;\n    margin-top: -10px;\n}\n\n\n\n#content-left {\n    background:
+        transparent;\n    clear: left;\n    float: left;\n    min-height: 400px;\n
+        \   position: relative;\n    width: 800px;\n}\n\n#content-left p {\n    font-size:
+        18px;\n    line-height: 20px;\n    padding: 5px 5px 5px 0px;\n}\n\n#content-left
+        img {\n    padding: 5px 5px 5px 0px;\n}\n\n\n#content-left h2 {\nwidth: 560px;\ndisplay:
+        inline-block;\nline-height: 26px;\nbackground:none;\npadding: 5px 5px 5px
+        0px;\nborder:none;\nfont-size:24px;\ncolor: #000;\n}\n\nstrong, b { font-weight:bold;
+        }\n\n</style>\n</head>\n<body>\n    \n<div id=\"header\">\n    <div id=\"header-inner\">
+        \        \n      \n        <a id=\"logo\" href=\"http://hypem.com/\" title=\"The
+        Hype Machine\"> </a> \n \n        <ul class=\"menu\"> \n \n            <li><a
+        href=\"http://hypem.com/about\" title=\"About Hype Machine\">About</a></li>
+        \n            <li><a href=\"http://hypem.com/contact\" title=\"Contact us\">Contact</a></li>
+        \n            \n        </ul><!-- menu --> \n\n    </div><!-- header-inner
+        -->\n</div><!-- header -->\n\n<div id=\"content-wrapper\">\n    <div id=\"message\">\n
+        \       <h1>Error 404: File not found</h1>\n    </div><!-- message -->\n\n
+        \   <div id=\"container\">    \n\n        <div id=\"content-left\">\n\n            <h2></h2>\n
+        \           \n            <a target=\"_blank\" href=\"http://flickr.com/photos/dvs/11951382/\"><img
+        src=\"http://static.hypem.net/images/error_notfound.jpg\" /></a><br/><br/>
+        \           \n            <p>You've asked for a page that doesn't exist.  Sorry
+        to disappoint. :(<br/><br/>\n\n                If you believe you are getting
+        this message in error, please <a href=\"http://hypem.com/contact\">click here</a>.
+        Be sure to provide your e-mail as well as a description of what you were doing
+        when this error occurred.\n                <br/><br/>\n                <a
+        target=\"_blank\" href=\"http://flickr.com/photos/dvs/\">photo by dvs</a>\n
+        \           </p>\n\n        </div>\n   \n        <div id=\"content-right\">\n
+        \       </div>\n\n    </div>\n\n</div><!-- content-wrapper -->\n\n<!-- begin
+        olark code -->\n<script type='text/javascript'>/*{literal}<![CDATA[*/\nwindow.olark||(function(c){var
+        f=window,d=document,l=f.location.protocol==\"https:\"?\"https:\":\"http:\",z=c.name,r=\"load\";var
+        nt=function(){f[z]=function(){(a.s=a.s||[]).push(arguments)};var a=f[z]._={},q=c.methods.length;while(q--){(function(n){f[z][n]=function(){f[z](\"call\",n,arguments)}})(c.methods[q])}a.l=c.loader;a.i=nt;a.p={0:+new
+        Date};a.P=function(u){a.p[u]=new Date-a.p[0]};function s(){a.P(r);f[z](r)}f.addEventListener?f.addEventListener(r,s,false):f.attachEvent(\"on\"+r,s);var
+        ld=function(){function p(hd){hd=\"head\";return[\"<\",hd,\"></\",hd,\"><\",i,'
+        onl' + 'oad=\"var d=',g,\";d.getElementsByTagName('head')[0].\",j,\"(d.\",h,\"('script')).\",k,\"='\",l,\"//\",a.l,\"'\",'\"',\"></\",i,\">\"].join(\"\")}var
+        i=\"body\",m=d[i];if(!m){return setTimeout(ld,100)}a.P(1);var j=\"appendChild\",h=\"createElement\",k=\"src\",n=d[h](\"div\"),v=n[j](d[h](z)),b=d[h](\"iframe\"),g=\"document\",e=\"domain\",o;n.style.display=\"none\";m.insertBefore(n,m.firstChild).id=z;b.frameBorder=\"0\";b.id=z+\"-loader\";if(/MSIE[
+        ]+6/.test(navigator.userAgent)){b.src=\"javascript:false\"}b.allowTransparency=\"true\";v[j](b);try{b.contentWindow[g].open()}catch(w){c[e]=d[e];o=\"javascript:var
+        d=\"+g+\".open();d.domain='\"+d.domain+\"';\";b[k]=o+\"void(0);\"}try{var
+        t=b.contentWindow[g];t.write(p());t.close()}catch(x){b[k]=o+'d.write(\"'+p().replace(/\"/g,String.fromCharCode(92)+'\"')+'\");d.close();'}a.P(2)};ld()};nt()})({loader:
+        \"static.olark.com/jsclient/loader0.js\",name:\"olark\",methods:[\"configure\",\"extend\",\"declare\",\"identify\"]});\n/*
+        custom configuration goes here (www.olark.com/documentation) */\nolark.identify('8642-858-10-6552');/*]]>{/literal}*/\nolark('api.chat.updateVisitorStatus',
+        {snippet: 'viewed 404 page'});\n//olark.configure('box.inline', true);\n</script>\n<!--
+        end olark code -->\n\n</body></html>"
+    http_version: 
+  recorded_at: Thu, 15 Nov 2012 01:39:00 GMT
+recorded_with: VCR 2.2.5

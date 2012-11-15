@@ -4,6 +4,7 @@ describe Syncer do
   
   # let(:id) {random_string}
   let(:id){ "1mahm" }
+  let(:bad_id){ "badid" }
   let(:type) {"song"}
   
   describe "with an unsynced songs" do
@@ -105,7 +106,16 @@ describe Syncer do
 
   describe "unique queues" do
     pending "add spec"
+
+    describe "song syncing" do
+      it "should sleep after syncing a song" do
+        
+        pending "add spec"
+        
+      end
+    end
   end
+  
   
 
   describe "error cases" do
@@ -120,8 +130,66 @@ describe Syncer do
       lambda{ Syncer.perform({:id => id}) }.should raise_error(ArgumentError, /Type and id must be defined/)
     end
     
-    it "should handle hype machine exceptions" do
-      pending "update hypem gem before"
+    # Note that in that case we need a cassette with a 403 response from the hypem favorites fetch.
+    # If the cassette .yml goes missing, it can be tested on a good one with replacing these :
+    #   response:
+    #     status:
+    #       code: 200
+    #       message: OK
+    # with these :
+    #   response:
+    #     status:
+    #       code: 403
+    #       message: Forbidden
+
+    it "should handle hype machine authorization errors" do
+      
+      # Fetching the last request date, so the timestamp in the request match,
+      # and VCR doesn't try to fetch a new episode
+      # When fixture needing to be recorded, using current time
+      if VCR::Cassette.new("refused_request").serializable_hash.values.first.empty?
+        @last_request_time = Time.now
+      else
+        @last_request_time = VCR::Cassette.new("refused_request").serializable_hash.values.first.last["recorded_at"]
+      end
+
+      # There should be a 10 seconds sleep when being forbidden to access a favorites page
+      Syncer.stub!(:sleep)
+      Syncer.should_receive(:sleep).with(10)
+      
+      Timecop.freeze(@last_request_time) do
+
+        VCR.use_cassette("refused_request") do
+          Syncer.perform({:type => type, :id => id})
+        end
+        
+      end
+      
+      # The job should be re-enqueued at the end of the sleep      
+      Syncer.should have_queue_size_of(1)
+      Syncer.should have_queued({:type => type, :id => id})
+      
+    end
+    
+    it "should handle bad requests" do
+      
+      # Fetching the last request date, so the timestamp in the request match,
+      # and VCR doesn't try to fetch a new episode
+      # When fixture needing to be recorded, using current time
+      if VCR::Cassette.new("bad_request").serializable_hash.values.first.empty?
+        @last_request_time = Time.now
+      else
+        @last_request_time = VCR::Cassette.new("bad_request").serializable_hash.values.first.last["recorded_at"]
+      end
+      
+      Timecop.freeze(@last_request_time) do
+
+        VCR.use_cassette("bad_request") do
+          lambda{ Syncer.perform({:type => type, :id => bad_id}) }.should raise_error(ArgumentError, /Error syncing song #{bad_id}/)
+        end
+        
+      end
+      
     end
     
   end

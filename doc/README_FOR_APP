@@ -1,2 +1,8 @@
-Use this README file to introduce your application and point to useful places in the API for learning more.
-Run "rake doc:app" to generate API documentation for your models, controllers, helpers, and libraries.
+TO CONSIDER
+* When chaining jobs, consider some syncings may be late to the party
+* Check the expiration on recommanders and crawlers at the job level, as they may be enqueued as callbacks
+long after being finished
+* In that case, handle the bootstraping and the updating well and separately. Maybe needing a threshold of up-to-date records
+before the job automatically switches in bootstrapong mode and waits for all to be synced
+
+
