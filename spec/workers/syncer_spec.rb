@@ -4,9 +4,24 @@ describe Syncer do
   
   # let(:id) {random_string}
   let(:id){ "1mahm" }
-  let(:bad_id){ "badid" }
+  let(:bad_id){ "this-is-a-bad-id" }
   let(:type) {"song"}
-  
+    
+  # Calling a spec associated to a stored cassette : fetch it or timefreeze it if present
+  def timed_vcr_cassette(cassette_name, &block)
+    if VCR::Cassette.new(cassette_name).serializable_hash.values.first.empty?
+      @last_request_time = Time.now
+    else
+      @last_request_time = VCR::Cassette.new(cassette_name).serializable_hash.values.first.last["recorded_at"]
+    end
+    
+    Timecop.freeze(@last_request_time) do
+      VCR.use_cassette(cassette_name) do
+        yield
+      end      
+    end
+  end
+    
   describe "with an unsynced songs" do
 
     let(:artist){random_string}
@@ -58,39 +73,18 @@ describe Syncer do
       @song.synced?.should be_true
 
       @song.favorites.smembers.should =~ user_names
-    end
-        
+    end        
   end
   
 
-  # describe "with a synced song" do
-  # 
-  # end
-  # 
-  # 
-  
   describe "callbacks" do
     
     let(:callback_type) { Crawler }
     let(:callback_args) { { :type => type, :id => id, :depth => 1 } }
     
     it "should run the callback after successful execution" do
-
-      # Fetching the last request date, so the timestamp in the request match,
-      # and VCR doesn't try to fetch a new episode
-      # When fixture needing to be recorded, using current time
-      if VCR::Cassette.new("track").serializable_hash.values.first.empty?
-        @last_request_time = Time.now
-      else
-        @last_request_time = VCR::Cassette.new("track").serializable_hash.values.first.last["recorded_at"]
-      end
-      
-      Timecop.freeze(@last_request_time) do
-
-        VCR.use_cassette("track") do
-          Syncer.perform({:type => type, :id => id, :callback => {:type => callback_type, :args => callback_args}})
-        end
-        
+      timed_vcr_cassette("track") do
+        Syncer.perform({:type => type, :id => id, :callback => {:type => callback_type, :args => callback_args}})
       end
       
       Crawler.should have_queue_size_of(1)
@@ -99,19 +93,25 @@ describe Syncer do
     
     # Maybe to spec only for crawler / recommander
     it "should forward its callback to children on failed execution" do
-      pending "add specs"
+      pending "maybe only for crawler and/or recommander"      
     end
   end
   
 
   describe "unique queues" do
-    pending "add spec"
 
+    it "should use unique queues" do
+      Syncer.should include Resque::Plugins::UniqueJob
+    end
+    
     describe "song syncing" do
       it "should sleep after syncing a song" do
-        
-        pending "add spec"
-        
+        Syncer.stub!(:sleep)
+        Syncer.should_receive(:sleep).with(1)
+
+        timed_vcr_cassette("track") do
+          Syncer.perform({:type => type, :id => id})
+        end
       end
     end
   end
@@ -143,53 +143,23 @@ describe Syncer do
     #       message: Forbidden
 
     it "should handle hype machine authorization errors" do
-      
-      # Fetching the last request date, so the timestamp in the request match,
-      # and VCR doesn't try to fetch a new episode
-      # When fixture needing to be recorded, using current time
-      if VCR::Cassette.new("refused_request").serializable_hash.values.first.empty?
-        @last_request_time = Time.now
-      else
-        @last_request_time = VCR::Cassette.new("refused_request").serializable_hash.values.first.last["recorded_at"]
-      end
-
       # There should be a 10 seconds sleep when being forbidden to access a favorites page
       Syncer.stub!(:sleep)
       Syncer.should_receive(:sleep).with(10)
-      
-      Timecop.freeze(@last_request_time) do
 
-        VCR.use_cassette("refused_request") do
-          Syncer.perform({:type => type, :id => id})
-        end
-        
+      timed_vcr_cassette("refused_request") do
+        Syncer.perform({:type => type, :id => id})        
       end
       
       # The job should be re-enqueued at the end of the sleep      
       Syncer.should have_queue_size_of(1)
-      Syncer.should have_queued({:type => type, :id => id})
-      
+      Syncer.should have_queued({:type => type, :id => id})      
     end
     
-    it "should handle bad requests" do
-      
-      # Fetching the last request date, so the timestamp in the request match,
-      # and VCR doesn't try to fetch a new episode
-      # When fixture needing to be recorded, using current time
-      if VCR::Cassette.new("bad_request").serializable_hash.values.first.empty?
-        @last_request_time = Time.now
-      else
-        @last_request_time = VCR::Cassette.new("bad_request").serializable_hash.values.first.last["recorded_at"]
-      end
-      
-      Timecop.freeze(@last_request_time) do
-
-        VCR.use_cassette("bad_request") do
-          lambda{ Syncer.perform({:type => type, :id => bad_id}) }.should raise_error(ArgumentError, /Error syncing song #{bad_id}/)
-        end
-        
-      end
-      
+    it "should handle bad requests" do      
+      timed_vcr_cassette("bad_request") do
+        lambda{ Syncer.perform({:type => type, :id => bad_id}) }.should raise_error(ArgumentError, /Error syncing song #{bad_id}/)
+      end      
     end
     
   end
