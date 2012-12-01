@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Syncer do
+describe SongSyncer do
   
   # let(:id) {random_string}
   let(:id){ "1mahm" }
-  let(:bad_id){ "this-is-a-bad-id" }
+  let(:bad_id){ "badid" }
   let(:type) {"song"}
     
   # Calling a spec associated to a stored cassette : fetch it or timefreeze it if present
@@ -32,6 +32,9 @@ describe Syncer do
       # Control what's happening to the song in the syncer
       @song = Song.new(id)
       Song.stub(:new).and_return(@song)
+      
+      # @syncer = SongSyncer.new({:id => id})
+      # SongSyncer.stub(:new).and_return(@syncer)
     end
       
 
@@ -52,7 +55,7 @@ describe Syncer do
       @song.hypem.stub(:artist).and_return(random_string)
       @song.hypem.stub(:title).and_return(random_string)
 
-      Syncer.perform({:type => type, :id => id})
+      SongSyncer.perform({:id => id})
     end
       
       
@@ -65,7 +68,7 @@ describe Syncer do
         .stub_chain(:hypem, :favorites, :get, :users, :map)
         .and_return( user_names )
 
-      Syncer.perform({:type => type, :id => id})
+      SongSyncer.perform({:id => id})
       
       @song.artist.should == artist      
       @song.title.should == title
@@ -76,6 +79,35 @@ describe Syncer do
     end        
   end
   
+  
+  describe "already synced data" do
+    
+    it "should not try to sync the data" do
+      song = Song.new(id)
+      song.synced_at = Time.now
+      song.synced?.should be_true
+      
+      syncer = SongSyncer.new({:id => id})
+      SongSyncer.stub(:new).and_return(syncer)
+
+      syncer.should_not_receive (:fetch_from_hypem)
+      
+      SongSyncer.perform({:id => id})
+    end
+    
+    it "should force the syncing if told to" do
+      pending "todo"
+    end
+    
+    it "should forward the forced syncing flag" do        
+      pending "todo on crawler and/or recommander maybe (?)"
+    end
+    
+    it "should forward directly to the attached callback" do
+      pending "todo"      
+    end
+
+  end
 
   describe "callbacks" do
     
@@ -84,7 +116,7 @@ describe Syncer do
     
     it "should run the callback after successful execution" do
       timed_vcr_cassette("track") do
-        Syncer.perform({:type => type, :id => id, :callback => {:type => callback_type, :args => callback_args}})
+        SongSyncer.perform({:id => id, :callback => {:type => callback_type, :args => callback_args}})
       end
       
       Crawler.should have_queue_size_of(1)
@@ -101,16 +133,16 @@ describe Syncer do
   describe "unique queues" do
 
     it "should use unique queues" do
-      Syncer.should include Resque::Plugins::UniqueJob
+      SongSyncer.should include Resque::Plugins::UniqueJob
     end
     
     describe "song syncing" do
       it "should sleep after syncing a song" do
-        Syncer.stub!(:sleep)
-        Syncer.should_receive(:sleep).with(1)
+        Kernel.stub!(:sleep)
+        Kernel.should_receive(:sleep).with(1)
 
         timed_vcr_cassette("track") do
-          Syncer.perform({:type => type, :id => id})
+          SongSyncer.perform({:id => id})
         end
       end
     end
@@ -120,14 +152,8 @@ describe Syncer do
 
   describe "error cases" do
   
-    it "should throw an error when no type or id" do
-      bad_type = random_string
-      bad_type.should_not == "song"
-      bad_type.should_not == "user"
-      
-      lambda{ Syncer.perform({:type => bad_type, "id" => id}) }.should raise_error(ArgumentError, "Type must be 'user' or 'song', not '#{bad_type}'")
-      lambda{ Syncer.perform({:type => type}) }.should raise_error(ArgumentError, /Type and id must be defined/)
-      lambda{ Syncer.perform({:id => id}) }.should raise_error(ArgumentError, /Type and id must be defined/)
+    it "should throw an error when no id" do      
+      lambda{ SongSyncer.perform({}) }.should raise_error(ArgumentError, /ID must be defined/)
     end
     
     # Note that in that case we need a cassette with a 403 response from the hypem favorites fetch.
@@ -144,22 +170,40 @@ describe Syncer do
 
     it "should handle hype machine authorization errors" do
       # There should be a 10 seconds sleep when being forbidden to access a favorites page
-      Syncer.stub!(:sleep)
-      Syncer.should_receive(:sleep).with(10)
+      syncer = SongSyncer.new({:id => id})
+      syncer.should_receive :sleep_and_reenqueue!
 
       timed_vcr_cassette("refused_request") do
-        Syncer.perform({:type => type, :id => id})        
+        syncer.perform
       end
-      
-      # The job should be re-enqueued at the end of the sleep      
-      Syncer.should have_queue_size_of(1)
-      Syncer.should have_queued({:type => type, :id => id})      
-    end
+    end    
     
     it "should handle bad requests" do      
       timed_vcr_cassette("bad_request") do
-        lambda{ Syncer.perform({:type => type, :id => bad_id}) }.should raise_error(ArgumentError, /Error syncing song #{bad_id}/)
+        lambda{ SongSyncer.perform({:id => bad_id}) }.should raise_error(ArgumentError, /Error syncing song #{bad_id}/)
       end      
+    end
+    
+  end
+
+  describe "#sleep_and_reenqueue!" do
+    it "should fetch the correct arguments" do
+      syncer = SongSyncer.new({:id => id})
+      syncer.send(:arguments).should == {:id => id}
+      
+      syncer = SongSyncer.new({:id => id, :force_syncing => true})
+      syncer.send(:arguments).should == {:id => id, :force_syncing => true}      
+    end
+
+    it "should work" do
+      syncer = SongSyncer.new({:id => id})
+
+      Kernel.stub!(:sleep)
+      Kernel.should_receive(:sleep).with(10)
+      
+      syncer.send(:sleep_and_reenqueue!)
+      SongSyncer.should have_queue_size_of(1)
+      SongSyncer.should have_queued({:id => id})
     end
     
   end

@@ -46,8 +46,8 @@ describe Song do
       
       it "should launch a job" do
         @song.sync!
-        Syncer.should have_queue_size_of(1)
-        Syncer.should have_queued({"type" => "song", "id" => @song.id})
+        SongSyncer.should have_queue_size_of(1)
+        SongSyncer.should have_queued({"id" => @song.id})
       end
       
     end    

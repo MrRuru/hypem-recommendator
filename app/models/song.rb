@@ -39,7 +39,7 @@ class Song < RedisRecord
   end
   
   def sync!
-    Resque.enqueue(Syncer, {"type" => "song", "id" => self.id})
+    Resque.enqueue(SongSyncer, {"id" => self.id})
   end
   
   def crawled?(depth = DEFAULT_CRAWL_DEPTH)

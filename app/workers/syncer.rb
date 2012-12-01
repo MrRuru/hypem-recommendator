@@ -1,109 +1,99 @@
 class Syncer
   include Resque::Plugins::UniqueJob
 
-  # Time to wait between song syncings, to not charge the hypem
-  SLEEP_FOR_SONGS = 1
+  @queue = :syncing
 
   # Time to wait after a 403 response, sign of too many requests
   SLEEP_AFTER_403 = 10
 
-  def self.raise_error(type, message)
-    logger.error(message)
-    raise type, message
-  end
+  attr_accessor :logger, :type, :id, :callback, :force_syncing
 
-  @queue = :syncing
-
-  def self.logger
-    @logger ||= Logger.new('log/syncer.log')
-  end
-      
-
-  def self.perform(args = {})
-    
+  # Constructor
+  def initialize(args)
     opts = args.symbolize_keys
-    
-    unless opts[:type] && opts[:id]
-      raise_error(ArgumentError, "Type and id must be defined")
+    self.logger = Logger.new('log/syncer.log')
+
+    # Validating attributes
+    unless opts[:id]
+      raise_error(ArgumentError, "ID must be defined")
     end
 
-    type = opts[:type].to_sym
-    id = opts[:id]
+    self.id = opts[:id]
     
+    # Setting up callback
     if opts[:callback]
       callback_opts = opts[:callback].symbolize_keys
       callback_type = callback_opts[:type]
       callback_args = callback_opts[:args].symbolize_keys
-      callback = Proc.new {
+      self.callback = Proc.new {
         Resque.enqueue(callback_type, callback_args)
       }      
     end
-
-
-    unless [:song, :user].include?(type)
-      raise_error(ArgumentError, "Type must be 'user' or 'song', not '#{type}'")
-    end
-      
-
-    if type == :song
-            
-      logger.info "Syncing song #{id}"
-      
-      song = Song.new(id)
-
-      begin
-        song.hypem.get
-        
-        begin
-          # Handling 403 HTTP Forbidden responses with sleeping a bit and re-enqueuing the job
-          # Since there is only one song queue, it will be occupied during the sleep
-          user_ids = song.hypem.favorites.get.users.map{|user|user.name}
-        rescue => e
-          # The other exceptions are forwarded
-          if e.message.match /Net::HTTPForbidden/
-
-            logger.warn "403 when fetching song #{id}, sleeping a bit in the queue"
-
-            sleep(SLEEP_AFTER_403)
-            Resque.enqueue(Syncer, args)
-            return
-          else
-            throw e
-          end
-        end
-        
-      rescue => e
-        raise_error ArgumentError, "Error syncing song #{id} : #{e}"
-      end
-      
-      song.artist = song.hypem.artist
-      song.title = song.hypem.title
-      song.favorites.sadd(user_ids) unless user_ids.blank?
-      song.synced_at = Time.now
-      
-      sleep(SLEEP_FOR_SONGS)
     
-    elsif type == :user
-      
-      logger.info "Syncing user #{id}"
-
-      user = User.new(id)
-
-      begin
-        song_ids = user.hypem.loved_playlist.get.tracks.map{|song|song.media_id}
-      rescue => e
-        raise_error ArgumentError, "Error syncing user #{id} : #{e}"
-      end
-
-      user.playlist.sadd(song_ids)
-      user.synced_at = Time.now
-    end
-    
-    # Enqueuing the callback if there is one
-    if callback
-      callback.call
-    end
-      
+    # Setting up the forced syncing flag
+    self.force_syncing = !!opts[:force_syncing]
   end
+
+  # Core logic
+  def self.perform(args = {})
+    new(args).perform
+  end
+
+  def perform
+    begin
+      
+      # Fetch the data from hypem
+      if fetch? || self.force_syncing
+        fetch_from_hypem
+      end
+      
+      # Call its callback if present
+      if callback
+        callback.call
+      end
+
+    # Handle 403 errors
+    rescue => e
+      # Re-enqueue self when 403 response
+      if e.message.match /Net::HTTPForbidden/
+        sleep_and_reenqueue!
+        return
+      else
+        raise_error ArgumentError, "Error syncing #{type} #{id} : #{e}"
+      end
+    end    
+  end        
+
+  protected
+
+  # Arguments accessor (for re-enqueuing)
+  def arguments
+    Hash[*[:id, :callback, :force_syncing]
+      .select{|argument| !!self.send(argument)}
+      .map{|argument| [argument, self.send(argument)]}  
+      .flatten
+    ]
+  end
+
+  # Error logger/raiser
+  def raise_error(type, message)
+    self.logger.error(message)
+    raise type, message
+  end
+  
+  # Re-enqueuing on bad response
+  def sleep_and_reenqueue!
+    logger.warn "403 when fetching #{type} #{id}, sleeping a bit in the queue"
+
+    Kernel.sleep(SLEEP_AFTER_403)
+
+    Resque.enqueue(self.class, self.arguments)
+  end
+  
+  # Actual hypem fetching, defined in subclasses
+  def fetch_from_hypem
+    throw "Cannot fetch untyped data. Please precise wether a song or a user should be fetched"
+  end
+  
   
 end
