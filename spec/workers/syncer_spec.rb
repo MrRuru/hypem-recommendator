@@ -102,13 +102,13 @@ describe SongSyncer do
       synced_song.synced_at = Time.now
       synced_song.synced?.should be_true
       
-      syncer = SongSyncer.new({:id => id, :force_syncing => true})
+      syncer = SongSyncer.new({:id => id, :force => true})
       SongSyncer.stub(:new).and_return(syncer)
 
       syncer.stub!(:fetch_from_hypem)
       syncer.should_receive (:fetch_from_hypem)
       
-      SongSyncer.perform({:id => id, :force_syncing => true})
+      SongSyncer.perform({:id => id, :force => true})
     end
     
     it "should still call the attached callback" do
@@ -200,13 +200,13 @@ describe SongSyncer do
   describe "#sleep_and_reenqueue!" do
     it "should fetch the correct arguments" do
       syncer = SongSyncer.new({:id => id})
-      syncer.send(:arguments).should == {:id => id}
+      syncer.send(:opts).should == {:id => id}
       
-      syncer = SongSyncer.new({:id => id, :force_syncing => true})
-      syncer.send(:arguments).should == {:id => id, :force_syncing => true}      
+      syncer = SongSyncer.new({:id => id, :force => true})
+      syncer.send(:opts).should == {:id => id, :force => true}      
 
       syncer = SongSyncer.new({:id => id, :callback => {:type => callback_type, :args => callback_args}})
-      syncer.send(:arguments).should == {:id => id, :callback => {:type => callback_type, :args => callback_args}}  
+      syncer.send(:opts).should == {:id => id, :callback => {:type => callback_type, :args => callback_args}}  
     end
 
     it "should work" do

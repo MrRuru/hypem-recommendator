@@ -1,51 +1,15 @@
-class Syncer
-  include Resque::Plugins::UniqueJob
-
+class Syncer < BaseWorker
   @queue = :syncing
 
   # Time to wait after a 403 response, sign of too many requests
   SLEEP_AFTER_403 = 10
 
-  attr_accessor :logger, :type, :id, :callback, :force_syncing, :opts
-
-  # Constructor
-  def initialize(args)
-    # Saving the arguments for re-enqueuing
-    self.opts = args.symbolize_keys
-
-    self.logger = Logger.new('log/syncer.log')
-
-    # Validating attributes
-    unless opts[:id]
-      raise_error(ArgumentError, "ID must be defined")
-    end
-
-    self.id = opts[:id]
-    
-    # Setting up callback
-    if opts[:callback]
-      callback_opts = opts[:callback].symbolize_keys
-      callback_type = callback_opts[:type]
-      callback_args = callback_opts[:args].symbolize_keys
-      self.callback = Proc.new {
-        Resque.enqueue(callback_type, callback_args)
-      }      
-    end
-    
-    # Setting up the forced syncing flag
-    self.force_syncing = !!opts[:force_syncing]
-  end
-
-  # Core logic
-  def self.perform(args = {})
-    new(args).perform
-  end
-
+  # Performing logic
   def perform
     begin
       
       # Fetch the data from hypem
-      if perform? || self.force_syncing
+      if perform? || self.force
         fetch_from_hypem
       end
       
@@ -68,24 +32,13 @@ class Syncer
 
   protected
 
-  # Arguments accessor (for re-enqueuing)
-  def arguments
-    opts
-  end
-
-  # Error logger/raiser
-  def raise_error(type, message)
-    self.logger.error(message)
-    raise type, message
-  end
-  
   # Re-enqueuing on bad response
   def sleep_and_reenqueue!
     logger.warn "403 when fetching #{type} #{id}, sleeping a bit in the queue"
 
     Kernel.sleep(SLEEP_AFTER_403)
 
-    Resque.enqueue(self.class, self.arguments)
+    Resque.enqueue(self.class, self.opts)
   end
   
   # Actual hypem fetching, defined in subclasses

@@ -32,7 +32,7 @@ class User < RedisRecord
   end
   
   def sync!
-    Resque.enqueue(Syncer, {"type" => "user", "id" => self.id})
+    Resque.enqueue(UserSyncer, {:id => self.id})
   end
   
   def crawled?(depth = DEFAULT_CRAWL_DEPTH)
@@ -40,7 +40,7 @@ class User < RedisRecord
   end
   
   def crawl!(depth = DEFAULT_CRAWL_DEPTH, force = false)
-    Resque.enqueue(Crawler, "user", self.id, depth, force)
+    Resque.enqueue(UserCrawler, {:id => self.id, :depth => depth, :force => force})
   end
 
   def build_recommendations!

@@ -47,7 +47,7 @@ class Song < RedisRecord
   end
   
   def crawl!(depth = DEFAULT_CRAWL_DEPTH, force = false)
-    Resque.enqueue(Crawler, "song", self.id, depth, force)
+    Resque.enqueue(SongCrawler, {:id => self.id, :depth => depth, :force => force})
   end
 
   def recommendations_exist?

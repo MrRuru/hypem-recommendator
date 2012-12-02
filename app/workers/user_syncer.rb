@@ -2,10 +2,8 @@ class UserSyncer < Syncer
 
   @queue = :syncing
 
-  # Constructor
-  def initialize(args)
-    self.type = :user
-    super
+  def type
+    "user"
   end
 
   # Song model accessor

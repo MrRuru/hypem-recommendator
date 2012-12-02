@@ -2,14 +2,12 @@ class SongSyncer < Syncer
   
   @queue = :syncing
   
+  def type
+    "song"
+  end
+  
   # Time to wait between song syncings, to not charge the hypem
   SLEEP_FOR_SONGS = 1
-
-  # Constructor
-  def initialize(args)
-    self.type = :song
-    super
-  end
 
   private
 
