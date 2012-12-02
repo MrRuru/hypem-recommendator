@@ -16,56 +16,43 @@ class Crawler < BaseWorker
   
   # Core logic
   def perform
-    process_crawl
-
-    if self.callback
-      self.callback.call
-    end
-  end        
-
-  protected
-
-  def process_crawl
-    throw "please call the crawl on a user or a song"
-    
-    # Core logic
-    # if unsynced
-      # run sync with self (and self's callback) as callback
-    # else 
-      # if every children is crawled
-        # set crawl status
-        # run callback
-      # else
-        # run crawl on out-of-date children
-        # with self (and self's callback) as a callback
-      # end
-    # end
-    
+  
     # Force logic : beware infite loops
     
-    if self.object.crawled?(depth)
-      self.callback.call
-      return
-    end
+    # TODO
+    # Crawled status array by depth (overriding lower depths)
+    # Crawled(0) = synced ; crawl!(0) = sync!
+
     
-    if unsynced?
-      self.object.sync!(:callback => self.to_callback, :force => self.force)
-      return
+    # If not already crawled for this depth
+    if !self.object.crawled?(depth)
       
-    else
-      if depth == 0 || children.map{|child|child.crawled?(depth-1)}.sum
-        self.object.crawled_at[depth] = Time.now #crawled_at[0] should == synced_at
-        self.callback.call
+      # Sync it and quit before crawling its children
+      if unsynced?
+        self.object.sync!(:callback => self.to_callback, :force => self.force)
         return
+      
       else
-        uncrawled_children.each do |child|
-          child.crawl!(:callback => self.to_callback, :force => self.force, :depth => depth - 1)
+        # If there remain uncrawled children ,crawl them and quit
+        uncrawled_children = self.object.children.select{|child| !child.crawled?(depth-1)}
+
+        if !uncrawled_children.empty?
+          uncrawled_children.each do |child|
+            child.crawl! :callback => self.to_callback, :force => self.force, :depth => (depth - 1)
+          end
+          return #does it exit all of the task ??
+        
+        # Otherwise we can officially set the crawl on the current element
+        else
+          self.crawled_at[depth] = Time.now
         end
-        return
       end
     end
-
-    # TODO : crawl status array, depending on depth
-  end
+           
+    # Everything went ok (either already crawled, or children already ok) : forward to the callback
+    if self.callback
+      self.callback.call   
+    end
+  end        
 
 end

@@ -2,27 +2,27 @@ class SongCrawler < Crawler
 
   @queue = :crawling
 
-  def song
-    Song.new(id)
+  def object
+    @song ||= Song.new(id)
   end
 
-  def process_crawl
-    logger.info "Crawling song #{id} at depth #{depth} #{'(forcing)' if force}"
-
-    unless song.synced?
-      logger.info "Song #{id} was not synced : syncing it"
-      song.sync!
-      return
-    end
-      
-    logger.info "Crawling song #{id} users : #{song.user_ids}"
-    
-    song.users.each do |user|
-      user.crawl!(depth - 1, force) if force || !user.crawled?(depth - 1)
-    end
-
-    song.crawled_at = Time.now
-    song.crawl_depth = depth
-  end
+  # def process_crawl
+  #   logger.info "Crawling song #{id} at depth #{depth} #{'(forcing)' if force}"
+  # 
+  #   unless song.synced?
+  #     logger.info "Song #{id} was not synced : syncing it"
+  #     song.sync!
+  #     return
+  #   end
+  #     
+  #   logger.info "Crawling song #{id} users : #{song.user_ids}"
+  #   
+  #   song.users.each do |user|
+  #     user.crawl!(depth - 1, force) if force || !user.crawled?(depth - 1)
+  #   end
+  # 
+  #   song.crawled_at = Time.now
+  #   song.crawl_depth = depth
+  # end
 
 end
