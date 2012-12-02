@@ -6,6 +6,8 @@ describe SongSyncer do
   let(:id){ "1mahm" }
   let(:bad_id){ "badid" }
   let(:type) {"song"}
+  let(:callback_type) { Crawler }
+  let(:callback_args) { { :type => type, :id => id, :depth => 1 } }    
     
   # Calling a spec associated to a stored cassette : fetch it or timefreeze it if present
   def timed_vcr_cassette(cassette_name, &block)
@@ -83,9 +85,9 @@ describe SongSyncer do
   describe "already synced data" do
     
     it "should not try to sync the data" do
-      song = Song.new(id)
-      song.synced_at = Time.now
-      song.synced?.should be_true
+      synced_song = Song.new(id)
+      synced_song.synced_at = Time.now
+      synced_song.synced?.should be_true
       
       syncer = SongSyncer.new({:id => id})
       SongSyncer.stub(:new).and_return(syncer)
@@ -96,23 +98,36 @@ describe SongSyncer do
     end
     
     it "should force the syncing if told to" do
-      pending "todo"
+      synced_song = Song.new(id)
+      synced_song.synced_at = Time.now
+      synced_song.synced?.should be_true
+      
+      syncer = SongSyncer.new({:id => id, :force_syncing => true})
+      SongSyncer.stub(:new).and_return(syncer)
+
+      syncer.stub!(:fetch_from_hypem)
+      syncer.should_receive (:fetch_from_hypem)
+      
+      SongSyncer.perform({:id => id, :force_syncing => true})
     end
     
-    it "should forward the forced syncing flag" do        
-      pending "todo on crawler and/or recommander maybe (?)"
-    end
-    
-    it "should forward directly to the attached callback" do
-      pending "todo"      
+    it "should still call the attached callback" do
+      synced_song = Song.new(id)
+      synced_song.synced_at = Time.now
+      synced_song.synced?.should be_true
+
+      syncer = SongSyncer.new({:id => id, :callback => {:type => callback_type, :args => callback_args}})
+      SongSyncer.stub(:new).and_return(syncer)
+      
+      syncer.callback.should_not be_nil
+      syncer.callback.should_receive(:call)
+      
+      SongSyncer.perform({:id => id, :callback => {:type => callback_type, :args => callback_args}})
     end
 
   end
 
   describe "callbacks" do
-    
-    let(:callback_type) { Crawler }
-    let(:callback_args) { { :type => type, :id => id, :depth => 1 } }
     
     it "should run the callback after successful execution" do
       timed_vcr_cassette("track") do
@@ -122,11 +137,7 @@ describe SongSyncer do
       Crawler.should have_queue_size_of(1)
       Crawler.should have_queued(callback_args)
     end
-    
-    # Maybe to spec only for crawler / recommander
-    it "should forward its callback to children on failed execution" do
-      pending "maybe only for crawler and/or recommander"      
-    end
+
   end
   
 
@@ -193,6 +204,9 @@ describe SongSyncer do
       
       syncer = SongSyncer.new({:id => id, :force_syncing => true})
       syncer.send(:arguments).should == {:id => id, :force_syncing => true}      
+
+      syncer = SongSyncer.new({:id => id, :callback => {:type => callback_type, :args => callback_args}})
+      syncer.send(:arguments).should == {:id => id, :callback => {:type => callback_type, :args => callback_args}}  
     end
 
     it "should work" do

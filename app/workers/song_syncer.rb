@@ -37,7 +37,7 @@ class SongSyncer < Syncer
   end
   
   # Checking if fetching must be done
-  def fetch?
+  def perform?
     !song.synced?
   end
           

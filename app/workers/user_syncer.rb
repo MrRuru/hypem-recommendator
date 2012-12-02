@@ -24,7 +24,7 @@ class UserSyncer < Syncer
   end
   
   # Fetch or not?
-  def fetch?
+  def perform?
     !user.synced?
   end
 

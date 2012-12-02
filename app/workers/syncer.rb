@@ -6,11 +6,13 @@ class Syncer
   # Time to wait after a 403 response, sign of too many requests
   SLEEP_AFTER_403 = 10
 
-  attr_accessor :logger, :type, :id, :callback, :force_syncing
+  attr_accessor :logger, :type, :id, :callback, :force_syncing, :opts
 
   # Constructor
   def initialize(args)
-    opts = args.symbolize_keys
+    # Saving the arguments for re-enqueuing
+    self.opts = args.symbolize_keys
+
     self.logger = Logger.new('log/syncer.log')
 
     # Validating attributes
@@ -43,7 +45,7 @@ class Syncer
     begin
       
       # Fetch the data from hypem
-      if fetch? || self.force_syncing
+      if perform? || self.force_syncing
         fetch_from_hypem
       end
       
@@ -68,11 +70,7 @@ class Syncer
 
   # Arguments accessor (for re-enqueuing)
   def arguments
-    Hash[*[:id, :callback, :force_syncing]
-      .select{|argument| !!self.send(argument)}
-      .map{|argument| [argument, self.send(argument)]}  
-      .flatten
-    ]
+    opts
   end
 
   # Error logger/raiser
