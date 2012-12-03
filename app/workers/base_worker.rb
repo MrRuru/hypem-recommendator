@@ -43,6 +43,11 @@ class BaseWorker
     raise type, message
   end
   
+  # Conversion to callback hash
+  def to_callback
+    {:type => self.class, :args => self.opts}
+  end
+  
   def perform
     throw "please define this in subclasses!"
   end

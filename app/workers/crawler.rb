@@ -26,19 +26,21 @@ class Crawler < BaseWorker
     
     # If not already crawled for this depth
     if !self.object.crawled?(depth)
-      
+
       # Sync it and quit before crawling its children
-      if unsynced?
-        self.object.sync!(:callback => self.to_callback, :force => self.force)
+      if !self.object.synced?
+        
+        self.object.sync!(:callback => self.to_callback)
         return
       
       else
+        
         # If there remain uncrawled children ,crawl them and quit
         uncrawled_children = self.object.children.select{|child| !child.crawled?(depth-1)}
 
         if !uncrawled_children.empty?
           uncrawled_children.each do |child|
-            child.crawl! :callback => self.to_callback, :force => self.force, :depth => (depth - 1)
+            child.crawl! :callback => self.to_callback, :depth => (depth - 1)
           end
           return #does it exit all of the task ??
         
