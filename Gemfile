@@ -68,8 +68,8 @@ gem 'debugger'
 gem 'recommendify', :github => 'lemmycaution/recommendify'
 
 # Hypem API
-gem 'hypem', # :git => "git://github.com/MrRuru/hypem.git"
-             :path => "../hypem"
+gem 'hypem', :git => "git://github.com/MrRuru/hypem.git"
+             # :path => "../hypem"
 # Testing
 group :test do
   gem 'rspec'
