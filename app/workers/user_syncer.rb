@@ -15,7 +15,8 @@ class UserSyncer < Syncer
   def fetch_from_hypem
     logger.info "Syncing user #{id}"
   
-    song_ids = user.hypem.loved_playlist.get.tracks.map{|song|song.media_id}
+    hypem = Hypem.user(@id)
+    song_ids = hypem.loved_playlist.get.tracks.map{|song|song.media_id}
   
     user.playlist.sadd(song_ids)
     user.synced_at = Time.now

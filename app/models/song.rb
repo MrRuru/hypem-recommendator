@@ -29,10 +29,6 @@ class Song < RedisRecord
     user_ids.map{|user_id|User.new(user_id)}
   end
 
-  def hypem
-    @hypem ||= Hypem.track(@id)
-  end  
-
   # Jobs builders
   def synced?
     !!synced_at && ( Time.parse(synced_at) > (Time.now - EXPIRE_AFTER))

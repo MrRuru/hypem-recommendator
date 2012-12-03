@@ -25,59 +25,20 @@ describe SongSyncer do
   end
     
   describe "with an unsynced songs" do
-
-    let(:artist){random_string}
-    let(:title){random_string}
-    let(:user_names){random_array}
-
-    before(:each) do
-      # Control what's happening to the song in the syncer
+      
+    it "should sync with hypem data" do      
       @song = Song.new(id)
       Song.stub(:new).and_return(@song)
+
+      timed_vcr_cassette("track") do
+        SongSyncer.perform({:id => id})
+      end
       
-      # @syncer = SongSyncer.new({:id => id})
-      # SongSyncer.stub(:new).and_return(@syncer)
-    end
-      
+      @song.artist.should == "Soko"      
+      @song.title.should == "I'll Kill Her (Hannes Fischer Remix)"
+      @song.synced_at.to_s.should == "2012-11-15 01:45:12 +0100"
 
-    it "should try to sync with hypem" do
-      @song.stub(:hypem).and_return(Object.new)
-
-      @song.hypem.should_receive(:get)
-      
-      @song.hypem.stub(:favorites).and_return(Object.new)
-      @song.hypem.should_receive(:favorites)
-
-      @song.hypem.favorites.stub(:get).and_return(@song.hypem.favorites)
-      @song.hypem.favorites.should_receive(:get)
-
-      @song.hypem.favorites.stub(:users).and_return([])
-      @song.hypem.favorites.should_receive(:users)
-
-      @song.hypem.stub(:artist).and_return(random_string)
-      @song.hypem.stub(:title).and_return(random_string)
-
-      SongSyncer.perform({:id => id})
-    end
-      
-      
-    it "should process the hypem data" do      
-      @song.stub_chain(:hypem, :get)
-      @song.stub_chain(:hypem, :artist).and_return(artist)
-      @song.stub_chain(:hypem, :title).and_return(title)
-        
-      @song
-        .stub_chain(:hypem, :favorites, :get, :users, :map)
-        .and_return( user_names )
-
-      SongSyncer.perform({:id => id})
-      
-      @song.artist.should == artist      
-      @song.title.should == title
-      @song.synced_at.should_not be_nil
-      @song.synced?.should be_true
-
-      @song.favorites.smembers.should =~ user_names
+      @song.favorites.smembers.should =~ ["ElectricEclectic", "JVArgas", "JanaVGK", "Kamuy", "Piiiem", "StrangeMachine", "amygo", "artorius", "bws81", "cheriths", "evgenia", "hotshowers", "itsbhaji", "missvu", "mrtz", "sdubbs", "tangowithlions", "tobi_dragon", "travelling", "zuccakathi"]
     end        
   end
   

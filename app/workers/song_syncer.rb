@@ -21,12 +21,13 @@ class SongSyncer < Syncer
     logger.info "Syncing song #{id}"
    
     # Fetching the hypem data
-    song.hypem.get      
-    user_ids = song.hypem.favorites.get.users.map{|user|user.name}
+    hypem = Hypem.track(id)
+    hypem.get
+    user_ids = hypem.favorites.get.users.map{|user|user.name}
     
     # Storing it
-    song.artist = song.hypem.artist
-    song.title = song.hypem.title
+    song.artist = hypem.artist
+    song.title = hypem.title
     song.favorites.sadd(user_ids) unless user_ids.blank?
     song.synced_at = Time.now                
 
