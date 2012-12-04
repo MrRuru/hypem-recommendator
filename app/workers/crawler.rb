@@ -36,7 +36,7 @@ class Crawler < BaseWorker
       else
         
         # If there remain uncrawled children ,crawl them and quit
-        uncrawled_children = self.object.children.select{|child| !child.crawled?(depth-1)}
+        uncrawled_children = self.children.select{|child| !child.crawled?(depth-1)}
 
         if !uncrawled_children.empty?
           uncrawled_children.each do |child|

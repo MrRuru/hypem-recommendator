@@ -2,9 +2,16 @@ class SongCrawler < Crawler
 
   @queue = :crawling
 
-  def object
+  def song
     @song ||= Song.new(id)
   end
+
+  def children
+    song.users
+  end
+  
+  alias :object :song
+
 
   # def process_crawl
   #   logger.info "Crawling song #{id} at depth #{depth} #{'(forcing)' if force}"

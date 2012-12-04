@@ -46,34 +46,49 @@ describe Crawler do
       @song.synced_at = Time.now      
       @song.synced?.should be_true
       @song.crawled?(depth).should be_false
-      
-      
-      
+
     end
     
     it "should crawl uncrawled children with a lower depth" do
       
-      let(depth){0}
-
-      # Check statuses
+      # Setting up the data
+      crawled_user = Object.new
+      uncrawled_user = Object.new
+      
+      crawled_user.stub!(:crawled?).and_return(true)
+      uncrawled_user.stub!(:crawled?).and_return(false)
+      
+      @song.stub!(:users).and_return([crawled_user, uncrawled_user])
       
       # Launch uncrawled with itself (and its callback) as callback at lower depth
+      crawled_user.should_not_receive(:crawl!)
+      uncrawled_user.should_receive(:crawl!).with({:depth => (depth - 1), :callback => crawler.to_callback})
       
       # Do not launch its callback
+      crawler.callback.should_not_receive(:call)
+      
+      crawler.perform
       
       # Do not set its flag
-      
-      pending
+      @song.crawled?(depth).should be_false      
       
     end
     
     it "should set its flag and call the callback if depth is 0" do
 
-      # Set its flag
+      # Setting up the data
+      crawler.depth = 0
       
+      # The childent should not be checked
+      crawler.should_not_receive(:children)
+                  
       # Call its callback
+      crawler.callback.should_receive(:call)
       
-      pending
+      crawler.perform
+      
+      # Set its flag
+      @song.crawled?(depth).should be_true  
       
     end
     

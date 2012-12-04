@@ -15,7 +15,6 @@ describe Song do
   end
 
   
-  
   describe "#syncing" do
     
     describe "#synced?" do
@@ -53,5 +52,45 @@ describe Song do
     end    
 
   end
+    
+  describe "crawling" do
+    
+    describe "#crawl!" do
+
+      it "should launch a job" do
+      
+        pending
+      
+      end
+      
+      it "should handle the default depth" do
+        
+      end
+
+    end
+    
+    describe "#crawled?" do
+  
+      it "should check the syncing status for depth 0" do
+        
+        pending
+        
+      end
+      
+      it "should check the crawl date existence and expiration" do
+        
+        pending
+        
+      end
+      
+      it "should propagate down - if better - but not up" do
+        
+        pending
+        
+      end      
+      
+    end
+    
+  end  
     
 end
