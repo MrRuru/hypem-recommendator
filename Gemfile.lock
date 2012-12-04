@@ -1,16 +1,17 @@
 GIT
+  remote: git://github.com/MrRuru/hypem.git
+  revision: 819a0eb160ea3a41bc9aae4a7e5a48a3ae336ace
+  specs:
+    hypem (0.2.1)
+      andand
+      httparty
+
+GIT
   remote: git://github.com/lemmycaution/recommendify.git
   revision: 87ca0e53e07069b5941b1df7ba783ea60d8d27aa
   specs:
     recommendify (0.3.8)
       redis (>= 2.2.2)
-
-PATH
-  remote: ../hypem
-  specs:
-    hypem (0.2.1)
-      andand
-      httparty
 
 GEM
   remote: https://rubygems.org/
