@@ -4,11 +4,17 @@ class Song < RedisRecord
   EXPIRE_AFTER = 1.day
   DEFAULT_CRAWL_DEPTH = 2 # Enough to get one-level recommendations
   
+  include Crawlable
+
+  crawlable do 
+    expire_after EXPIRE_AFTER
+    default_depth DEFAULT_CRAWL_DEPTH
+    crawl_with SongCrawler
+  end
+  
   # TODO : async sync! on favorites and recommendations
 
   has_attributes :synced_at,
-                 :crawled_at, 
-                 :crawl_depth, 
                  :recommended_at, 
                  :recommendations,
                  :recommendations_built_at,
@@ -38,13 +44,6 @@ class Song < RedisRecord
     Resque.enqueue(SongSyncer, {"id" => self.id})
   end
   
-  def crawled?(depth = DEFAULT_CRAWL_DEPTH)
-    crawled_at && ( Time.parse(crawled_at) > Time.now - EXPIRE_AFTER ) && (crawl_depth.to_i >= depth )
-  end
-  
-  def crawl!(depth = DEFAULT_CRAWL_DEPTH, force = false)
-    Resque.enqueue(SongCrawler, {:id => self.id, :depth => depth, :force => force})
-  end
 
   def recommendations_exist?
     !!recommendations
