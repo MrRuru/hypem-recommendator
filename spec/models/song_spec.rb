@@ -5,6 +5,7 @@ describe Song do
   let(:id) {random_string}
   let(:artist) {"Dj Awesome"}
   let(:title) {"Hypermegamix"}
+  let(:expiration) {1.day}
 
 
   before :each do
@@ -34,7 +35,7 @@ describe Song do
       it "should return false for synced but outdated songs" do
         @song.artist = artist
         @song.title = title
-        @song.synced_at = Time.now - Song::EXPIRE_AFTER - 1.second
+        @song.synced_at = Time.now - expiration- 1.second
 
         @song.synced?.should be_false
       end

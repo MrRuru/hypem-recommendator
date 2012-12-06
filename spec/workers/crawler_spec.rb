@@ -78,9 +78,6 @@ describe Crawler do
 
       # Setting up the data
       crawler.depth = 0
-      
-      # The childent should not be checked
-      crawler.should_not_receive(:children)
                   
       # Call its callback
       crawler.callback.should_receive(:call)

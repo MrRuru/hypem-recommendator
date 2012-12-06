@@ -1,21 +1,24 @@
 # A hype machine song : storing its details and the users who favorited it 
 class Song < RedisRecord
 
-  EXPIRE_AFTER = 1.day
-  DEFAULT_CRAWL_DEPTH = 2 # Enough to get one-level recommendations
+  # Syncing
+  extend Syncable
   
-  include Crawlable
+  is_syncable_with(
+    :expiration => 1.day, 
+    :syncer => SongSyncer
+  )
 
-  crawlable do 
-    expire_after EXPIRE_AFTER
-    default_depth DEFAULT_CRAWL_DEPTH
-    crawl_with SongCrawler
-  end
+
+  extend Crawlable
+  is_crawlable_with(
+    :expiration => 1.day,
+    :default_depth => 2, # Enough to get one-level recommendations
+    :crawler => SongCrawler
+  )
   
-  # TODO : async sync! on favorites and recommendations
-
-  has_attributes :synced_at,
-                 :recommended_at, 
+  # Attributes
+  has_attributes :recommended_at, 
                  :recommendations,
                  :recommendations_built_at,
                  :artist,
@@ -34,16 +37,6 @@ class Song < RedisRecord
   def users
     user_ids.map{|user_id|User.new(user_id)}
   end
-
-  # Jobs builders
-  def synced?
-    !!synced_at && ( Time.parse(synced_at) > (Time.now - EXPIRE_AFTER))
-  end
-  
-  def sync!
-    Resque.enqueue(SongSyncer, {"id" => self.id})
-  end
-  
 
   def recommendations_exist?
     !!recommendations
