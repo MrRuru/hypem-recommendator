@@ -21,7 +21,7 @@ class BaseWorker
     # Setting up callback
     if opts[:callback]
       callback_opts = opts[:callback].symbolize_keys
-      callback_type = callback_opts[:type]
+      callback_type = callback_opts[:type].constantize
       callback_args = callback_opts[:args].symbolize_keys
       self.callback = Proc.new {
         Resque.enqueue(callback_type, callback_args)
@@ -45,7 +45,7 @@ class BaseWorker
   
   # Conversion to callback hash
   def to_callback
-    {:type => self.class, :args => self.opts}
+    {:type => self.class.to_s, :args => self.opts}
   end
   
   def perform

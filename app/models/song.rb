@@ -3,13 +3,12 @@ class Song < RedisRecord
 
   # Syncing
   extend Syncable
-  
   is_syncable_with(
     :expiration => 1.day, 
     :syncer => SongSyncer
   )
 
-
+  # Crawling
   extend Crawlable
   is_crawlable_with(
     :expiration => 1.day,
@@ -18,8 +17,7 @@ class Song < RedisRecord
   )
   
   # Attributes
-  has_attributes :recommended_at, 
-                 :recommendations,
+  has_attributes :recommendations,
                  :recommendations_built_at,
                  :artist,
                  :title
@@ -38,6 +36,9 @@ class Song < RedisRecord
     user_ids.map{|user_id|User.new(user_id)}
   end
 
+
+  # Recommendation
+  
   def recommendations_exist?
     !!recommendations
   end

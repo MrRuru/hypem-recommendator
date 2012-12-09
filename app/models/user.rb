@@ -1,16 +1,24 @@
 # A hype machine song : storing its details and its playlist
 class User < RedisRecord
 
-  EXPIRE_AFTER = 1.week
-  DEFAULT_CRAWL_DEPTH = 3 # Enough to get one-level recommendations for each song
+  # Syncing
+  extend Syncable
+  is_syncable_with(
+    :expiration => 1.week, 
+    :syncer => UserSyncer
+  )
 
-  # TODO : async sync! on playlist accessing, handling expiration
+  # Crawling
+  extend Crawlable
+  is_crawlable_with(
+    :expiration => 1.week,
+    :default_depth => 3, # Enough to get one-level recommendations for each song
+    :crawler => UserCrawler
+  )
 
-  has_attributes :synced_at,
-                 :crawled_at, 
-                 :crawl_depth, 
-                 :recommended_at, 
-                 :recommendations
+
+  has_attributes :recommended_at,
+                 :recommendations_built_at
 
   has_associated :playlist
 
@@ -22,23 +30,8 @@ class User < RedisRecord
     song_ids.map{|song_id|Song.new(song_id)}
   end
   
-  # Jobs builders
-  def synced?
-    !!synced_at && ( Time.parse(synced_at) > (Time.now - EXPIRE_AFTER))
-  end
+  # Recommendation
   
-  def sync!
-    Resque.enqueue(UserSyncer, {:id => self.id})
-  end
-  
-  def crawled?(depth = DEFAULT_CRAWL_DEPTH)
-    crawled_at && ( Time.parse(crawled_at) > Time.now - EXPIRE_AFTER ) && (crawl_depth >= depth )
-  end
-  
-  def crawl!(depth = DEFAULT_CRAWL_DEPTH, force = false)
-    Resque.enqueue(UserCrawler, {:id => self.id, :depth => depth, :force => force})
-  end
-
   def build_recommendations!
     Resque.enqueue(Recommender, "user", self.id)
   end

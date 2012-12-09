@@ -92,14 +92,30 @@ describe Crawler do
   end
   
   describe "with an uncrawled object with crawled children" do
-    
+        
     it "should set its flag and call its callback" do
-      # Set its flag
+      # Setting up the data
+      @song.synced_at = Time.now      
+      @song.synced?.should be_true
+      @song.crawled?(depth).should be_false
       
+      users = []
+      
+      3.times do
+        crawled_user = Object.new
+        crawled_user.stub!(:crawled?).and_return(true)
+        users << crawled_user
+      end
+      
+      @song.stub!(:users).and_return(users)
+
       # Call its callback
+      crawler.callback.should_receive(:call)
       
-      pending
+      crawler.perform
       
+      # Set its flag
+      @song.crawled?(depth).should be_true  
     end
     
   end
@@ -108,9 +124,17 @@ describe Crawler do
     
     it "should not update its flag but call its callback" do
       
-      # Set its flag
+      # Setting up the data
+      @song.stub!(:synced?).and_return(true)
+      @song.stub!(:crawled?).and_return(true)
       
-      pending
+      # Call its callback
+      crawler.callback.should_receive(:call)
+
+      # Don't set its flag
+      @song.should_not_receive(:set_crawled_at)
+
+      crawler.perform
       
     end
     

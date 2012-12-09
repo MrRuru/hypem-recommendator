@@ -1,4 +1,5 @@
 class Crawler < BaseWorker
+
   @queue = :crawling
 
   attr_accessor :depth
@@ -17,12 +18,6 @@ class Crawler < BaseWorker
   # Core logic
   def perform
   
-    # Force logic : beware infite loops
-    
-    # TODO
-    # Crawled status array by depth (overriding lower depths)
-    # Crawled(0) = synced ; crawl!(0) = sync!
-
     # If unsynced, sync it
     if !self.object.synced?
       self.object.sync!(:callback => self.to_callback)

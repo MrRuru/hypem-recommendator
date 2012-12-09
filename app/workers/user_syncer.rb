@@ -6,6 +6,9 @@ class UserSyncer < Syncer
     "user"
   end
 
+  # To not overcharge the API
+  SLEEP_FOR_USERS = 15
+
   # Song model accessor
   def user
     User.new(id)
@@ -20,6 +23,9 @@ class UserSyncer < Syncer
   
     user.playlist.sadd(song_ids)
     user.synced_at = Time.now
+
+    # Sleeping a bit to not overcharge the queue
+    Kernel.sleep(SLEEP_FOR_USERS)    
   end
   
   # Fetch or not?

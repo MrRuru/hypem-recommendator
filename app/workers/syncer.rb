@@ -1,33 +1,35 @@
 class Syncer < BaseWorker
+
   @queue = :syncing
 
   # Time to wait after a 403 response, sign of too many requests
-  SLEEP_AFTER_403 = 10
+  SLEEP_AFTER_403 = 1000
 
   # Performing logic
   def perform
-    begin
-      
-      # Fetch the data from hypem
-      if perform? || self.force
+
+    # Fetch the data from hypem
+    if perform? || self.force
+
+      begin
         fetch_from_hypem
-      end
-      
-      # Call its callback if present
-      if callback
-        callback.call
+      rescue => e
+        # Re-enqueue self when 403 response
+        if e.message.match /403/
+          sleep_and_reenqueue!
+          return
+        else
+          raise_error ArgumentError, "Error syncing #{type} #{id} : #{e}"
+        end
       end
 
-    # Handle 403 errors
-    rescue => e
-      # Re-enqueue self when 403 response
-      if e.message.match /Net::HTTPForbidden/
-        sleep_and_reenqueue!
-        return
-      else
-        raise_error ArgumentError, "Error syncing #{type} #{id} : #{e}"
-      end
-    end    
+    end
+            
+    # Call its callback if present and everything went fine
+    if callback
+      callback.call
+    end
+
   end        
 
   protected

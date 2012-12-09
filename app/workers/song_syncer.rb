@@ -7,7 +7,7 @@ class SongSyncer < Syncer
   end
   
   # Time to wait between song syncings, to not charge the hypem
-  SLEEP_FOR_SONGS = 1
+  SLEEP_FOR_SONGS = 15
 
   private
 
