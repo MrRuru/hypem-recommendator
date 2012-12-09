@@ -85,7 +85,7 @@ describe Crawler do
       crawler.perform
       
       # Set its flag
-      @song.crawled?(depth).should be_true  
+      @song.crawled?(crawler.depth).should be_true  
       
     end
     

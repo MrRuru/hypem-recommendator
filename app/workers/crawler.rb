@@ -29,13 +29,13 @@ class Crawler < BaseWorker
       return
     end
     
-    # If not already crawled for this depth
+    # If not already crawled for this depth and depth > 0
     if !self.object.crawled?(depth)
 
       # If there remain uncrawled children ,crawl them and quit
       uncrawled_children = self.children.select{|child| !child.crawled?(depth-1)}
 
-      if !uncrawled_children.empty?
+      if depth > 0 && !uncrawled_children.empty?
         uncrawled_children.each do |child|
           child.crawl! :callback => self.to_callback, :depth => (depth - 1)
         end
@@ -43,7 +43,7 @@ class Crawler < BaseWorker
       
       # Otherwise we can officially set the crawl on the current element
       else
-        self.crawled_at[depth] = Time.now
+        self.object.set_crawled_at(depth)
       end
 
     end
