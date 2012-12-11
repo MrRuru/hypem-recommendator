@@ -16,10 +16,6 @@ class User < RedisRecord
     :crawler => UserCrawler
   )
 
-
-  has_attributes :recommended_at,
-                 :recommendations_built_at
-
   has_associated :playlist
 
   def song_ids
@@ -30,10 +26,4 @@ class User < RedisRecord
     song_ids.map{|song_id|Song.new(song_id)}
   end
   
-  # Recommendation
-  
-  def build_recommendations!
-    Resque.enqueue(Recommender, "user", self.id)
-  end
-
 end

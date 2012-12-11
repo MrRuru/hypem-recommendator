@@ -24,9 +24,6 @@ class Song < RedisRecord
 
   has_associated :favorites
 
-  def recommended_songs
-    recommendations ? JSON.parse(recommendations).map{|song_id| Song.new(song_id)} : []
-  end
 
   def user_ids
     favorites.exists ? favorites.smembers : []
@@ -36,19 +33,4 @@ class Song < RedisRecord
     user_ids.map{|user_id|User.new(user_id)}
   end
 
-
-  # Recommendation
-  
-  def recommendations_exist?
-    !!recommendations
-  end
-  
-  def recommendations_expired?
-    recommendations_built_at && ( Time.parse(recommendations_built_at) > Time.now - EXPIRE_AFTER )
-  end
-  
-  def build_recommendations!
-    Resque.enqueue(Recommender, self.id)
-  end
-  
 end

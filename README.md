@@ -1,13 +1,19 @@
-recommendation_api
-==================
+Shaker
+======
 
-An API server for the recommendify engine
+Scope Change!
+-------------
 
-TODO for v1.0
+Souncloud shuffle player sprinkled with track recommendations
+
+
+TODO for v0.1
 =============
-* Specs
-* Handle job callbacks
-* Queue song favorites syncs separately, and handle query limits
-* Handle total favcounts in recommandator
-* Deployment with multiple workers and native recommandator
-* Basic frontend
+* Souncloud API integration
+* Shuffle player on the frontend
+
+
+TODO later 
+==========
+* Recommendation engine
+* Authorizations

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Crawler do
   
   let(:id){random_string}
-  let(:callback){ {:type => Recommender, :args => {:id => "some_id"}} }
+  let(:callback){ {:type => "SongCrawler", :args => {:id => "some_id", :depth => 4}} }
   let(:depth){3}
   
   let(:crawler){SongCrawler.new(:id => id, :depth => depth, :callback => callback)}
