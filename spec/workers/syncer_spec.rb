@@ -6,8 +6,8 @@ describe SongSyncer do
   let(:id){ "1mahm" }
   let(:bad_id){ "badid" }
   let(:type) {"song"}
-  let(:callback_type) { Crawler }
-  let(:callback_args) { { :type => type, :id => id, :depth => 1 } }    
+  let(:callback_type) { "SongCrawler" }
+  let(:callback_args) { { :id => id, :depth => 1 } }    
     
   # Calling a spec associated to a stored cassette : fetch it or timefreeze it if present
   def timed_vcr_cassette(cassette_name, &block)
@@ -111,7 +111,7 @@ describe SongSyncer do
     describe "song syncing" do
       it "should sleep after syncing a song" do
         Kernel.stub!(:sleep)
-        Kernel.should_receive(:sleep).with(1)
+        Kernel.should_receive(:sleep).with(15)
 
         timed_vcr_cassette("track") do
           SongSyncer.perform({:id => id})
@@ -174,7 +174,7 @@ describe SongSyncer do
       syncer = SongSyncer.new({:id => id})
 
       Kernel.stub!(:sleep)
-      Kernel.should_receive(:sleep).with(10)
+      Kernel.should_receive(:sleep).with(1000)
       
       syncer.send(:sleep_and_reenqueue!)
       SongSyncer.should have_queue_size_of(1)
