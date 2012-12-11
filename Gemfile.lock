@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/MrRuru/hypem.git
-  revision: 819a0eb160ea3a41bc9aae4a7e5a48a3ae336ace
+  revision: f564536c5689ffed8b795d4f03a9e7208c545b80
   specs:
     hypem (0.2.1)
       andand
@@ -98,7 +98,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.19)
-    multi_json (1.3.7)
+    multi_json (1.5.0)
     multi_xml (0.5.1)
     polyglot (0.3.3)
     rack (1.4.1)
