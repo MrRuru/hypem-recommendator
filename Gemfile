@@ -46,6 +46,9 @@ gem 'ejs'
 # Twitter bootstrap generators with turbolink support
 gem 'twitter-bootstrap-turbo'
 
+# Souncloud gem
+gem 'soundcloud'
+
 # Puts a simple HTTP cache in front of your app (and gets you ready for later upgrading to nginx/varnish/squid)
 # gem 'rack-cache', '~> 1.2'
 
