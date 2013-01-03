@@ -7,7 +7,8 @@
     %h2= link_to "Title", "#", :class => "title"
     %h3= link_to "Artist", "#", :class => "artist"
 
-    %footer.controls
+    .controls
+      =link_to "Play", "#", :class => "play"
       =link_to "Like", "#", :class => "like"
 
   %section#current
@@ -19,9 +20,6 @@
     %h1=link_to "Zeds Dead - No Prayers", "#", :class => "title"
     %h2=link_to "Thissongissick.com",  "#", :class => "artist"
 
-    %footer.controls
-      =link_to "Like", "#", :class => "like"
-
   %aside#next
 
     %header Next
@@ -29,5 +27,11 @@
     %h2= link_to "Title", "#", :class => "title"
     %h3= link_to "Artist", "#", :class => "artist"
 
-    %footer.controls
+    .controls
+      =link_to "Play", "#", :class => "play"
       =link_to "Like", "#", :class => "like"
+
+%footer#controls
+  =link_to "Play", "#", :id => "play-current"
+  =link_to "Like", "#", :id => "like-current"
+  =link_to "Shuffle", "#", :id => "shuffle-current"

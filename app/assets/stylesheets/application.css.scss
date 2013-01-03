@@ -32,8 +32,15 @@ $gray2: #999;
 $lightgray: #CCC;
 
 // Helpers
-button {
-  @include button('simple', $orange2);
+.button {
+  padding: 0.5em 1em;
+  text-transform: uppercase;
+  display: inline-block;
+  color: white;
+  background-color: $orange1;
+  &:hover{
+    background-color: $orange2;
+  }
 }
 
 a{
@@ -43,7 +50,8 @@ a{
 // The global layout
 body{
   font-family: $lucida-grande;
-  color: $gray1;
+  color: $lightgray;
+  background-color: $gray1;
 }
 
 #container{
@@ -81,11 +89,13 @@ body{
 // Player page
 #player{
 
+//  @include span-columns(12);
+//  @include row(table);
+
   // The track being played
   #current{
     @include span-columns(8);
     @include pad();
-    padding-top: 0px;
 
     @include media($mobile) {
       @include span-columns(4);
@@ -93,7 +103,7 @@ body{
 
     #track-image{
       float: right;
-      border: 5px solid $beige;
+      border: 5px solid rgba(0,0,0,0.1);
       width: 130px;
       height: 130px;
     }
@@ -105,16 +115,28 @@ body{
   // The previous and next tracks of the playlist
   #prev, #next{
     @include span-columns(2);  
+    @include pad();
 
     @include media($mobile) {
       @include span-columns(1);
+    }
+
+    .controls{
+      .like, .play{
+        @extend .button;
+        display: inline-block;
+        text-align: center;
+      }
     }
   }
 
   // Global style
   #current, #prev, #next{
+    background-color: white;
+
     header{
       color: $beige;
+      font-weight: bold;
       text-transform: uppercase;
     }
 
@@ -124,7 +146,7 @@ body{
     }
 
     .title{
-      color: $gray1;
+      color: $blue1;
     }
 
     .artist, .title{
@@ -133,17 +155,22 @@ body{
         text-decoration: underline;
       }      
     }
-
-    .like{
-      padding: 0.5em 1em;
-      text-transform: uppercase;
-      display: inline-block;
-      color: white;
-      background-color: $orange1;
-      &:hover{
-        background-color: $orange2;
-      }
-    }
   }
 
+}
+
+
+footer#controls{
+  @include span-columns(6);
+  @include shift(3);
+  background-color: white;
+  @include pad();
+
+  text-align: center;
+
+  #like-current, #play-current, #shuffle-current{
+    @extend .button;
+    display: inline-block;
+    font-size: 150%;
+  }
 }
