@@ -1,0 +1,149 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require normalize.css
+ *= require h5bp.css
+ *= require_self
+ *= require_tree .
+ */
+
+@import "bourbon";
+@import "neat";
+
+$mobile: new-breakpoint(max-width 500px 6);
+
+$blue1: #69D2E7;
+$blue2: #A7DBD8;
+
+$orange1: #F38630;
+$orange2: #FA6900;
+
+$beige: #E0E4CC;
+
+$gray1: #333;
+$gray2: #999;
+$lightgray: #CCC;
+
+// Helpers
+button {
+  @include button('simple', $orange2);
+}
+
+a{
+  text-decoration: none;  
+}
+
+// The global layout
+body{
+  font-family: $lucida-grande;
+  color: $gray1;
+}
+
+#container{
+  @include outer-container;
+}
+
+
+// Banner
+#banner{
+  position: relative;
+
+  &>div {
+    @include outer-container;
+  }
+
+  margin-bottom: 50px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+  border-bottom: 10px solid $gray1;
+
+  @include background-image( radial-gradient($blue2, $blue1) );
+
+  color: white;
+  text-shadow: 0 0 15px rgba(0, 0, 0, 0.6),0 -1px 1px rgba(0, 0, 0, 0.6);
+
+  #soundcloud-logo{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+
+// Player page
+#player{
+
+  // The track being played
+  #current{
+    @include span-columns(8);
+    @include pad();
+    padding-top: 0px;
+
+    @include media($mobile) {
+      @include span-columns(4);
+    }
+
+    #track-image{
+      float: right;
+      border: 5px solid $beige;
+      width: 130px;
+      height: 130px;
+    }
+
+    border-left: 1px solid $beige;
+    border-right: 1px solid $beige;
+  }
+
+  // The previous and next tracks of the playlist
+  #prev, #next{
+    @include span-columns(2);  
+
+    @include media($mobile) {
+      @include span-columns(1);
+    }
+  }
+
+  // Global style
+  #current, #prev, #next{
+    header{
+      color: $beige;
+      text-transform: uppercase;
+    }
+
+    .artist{
+      color: $gray2;
+      font-size: 80%;
+    }
+
+    .title{
+      color: $gray1;
+    }
+
+    .artist, .title{
+      text-decoration: none;
+      &:hover{
+        text-decoration: underline;
+      }      
+    }
+
+    .like{
+      padding: 0.5em 1em;
+      text-transform: uppercase;
+      display: inline-block;
+      color: white;
+      background-color: $orange1;
+      &:hover{
+        background-color: $orange2;
+      }
+    }
+  }
+
+}

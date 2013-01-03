@@ -70,9 +70,13 @@ gem 'debugger'
 # Recommendation engine, the one with the native extension building disabled
 gem 'recommendify', :github => 'lemmycaution/recommendify'
 
-# Hypem API
-gem 'hypem', :git => "git://github.com/MrRuru/hypem.git"
-             # :path => "../hypem"
+# Haml templates
+gem 'haml-rails'
+
+# Bourbon neat SASS framework
+gem 'neat'
+
+
 # Testing
 group :test do
   gem 'rspec'

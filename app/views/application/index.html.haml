@@ -1,0 +1,33 @@
+#player
+
+  %aside#prev
+
+    %header Prev
+
+    %h2= link_to "Title", "#", :class => "title"
+    %h3= link_to "Artist", "#", :class => "artist"
+
+    %footer.controls
+      =link_to "Like", "#", :class => "like"
+
+  %section#current
+
+    %header Now Playing
+
+    =image_tag "https://i1.sndcdn.com/artworks-000020208116-tw81u0-t120x120.jpg?923db0b", :id => "track-image", :size => "130x130"
+
+    %h1=link_to "Zeds Dead - No Prayers", "#", :class => "title"
+    %h2=link_to "Thissongissick.com",  "#", :class => "artist"
+
+    %footer.controls
+      =link_to "Like", "#", :class => "like"
+
+  %aside#next
+
+    %header Next
+
+    %h2= link_to "Title", "#", :class => "title"
+    %h3= link_to "Artist", "#", :class => "artist"
+
+    %footer.controls
+      =link_to "Like", "#", :class => "like"

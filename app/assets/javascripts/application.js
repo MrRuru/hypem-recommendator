@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap
 //
 //= require underscore
 //= require json2
@@ -20,7 +19,7 @@
 //
 //= require turbolinks
 //
-//= require recommendator_app
+//= require mixer_app
 //
 // Commented until backbone app needed
 // require_tree ./models
