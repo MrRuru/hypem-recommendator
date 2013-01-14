@@ -15,15 +15,7 @@
 //
 //= require underscore
 //= require json2
-//= require backbone
 //
 //= require turbolinks
 //
-//= require mixer_app
-//
-// Commented until backbone app needed
-// require_tree ./models
-// require_tree ./collections
-// require_tree ./views
-// require_tree ./routers
-// require_tree ../templates
+//= require player

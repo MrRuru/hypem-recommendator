@@ -1,37 +1,39 @@
-#player
+#player{:"ng-controller" => "PlayerCtrl"}
 
   %aside#prev
 
     %header Prev
 
-    %h2= link_to "Title", "#", :class => "title"
-    %h3= link_to "Artist", "#", :class => "artist"
+    %h2= link_to "{{previousTrack().title}}", "#", :class => "title"
+    %h3= link_to "{{previousTrack().artist}}", "#", :class => "artist"
 
     .controls
-      =link_to "Play", "#", :class => "play"
-      =link_to "Like", "#", :class => "like"
+      =link_to "Play", "", :class => "play", :"ng-click" => "playPrevious()"
+      =link_to "Like", "", :class => "like"
 
   %section#current
 
     %header Now Playing
 
-    =image_tag "https://i1.sndcdn.com/artworks-000020208116-tw81u0-t120x120.jpg?923db0b", :id => "track-image", :size => "130x130"
+    =link_to "#", :id => "track-image" do
+      = image_tag "https://i1.sndcdn.com/artworks-000020208116-tw81u0-t120x120.jpg?923db0b", :size => "130x130"
 
-    %h1=link_to "Zeds Dead - No Prayers", "#", :class => "title"
-    %h2=link_to "Thissongissick.com",  "#", :class => "artist"
+    %h1=link_to "{{currentTrack.title}}", "#", :class => "title"
+    %h2=link_to "{{currentTrack.artist}}",  "#", :class => "artist"
+
+    %footer#controls
+      =link_to "Play", "#", :id => "play-current"
+      =link_to "Like", "#", :id => "like-current"
+      =link_to "Shuffle", "#", :id => "shuffle-current"
 
   %aside#next
 
     %header Next
 
-    %h2= link_to "Title", "#", :class => "title"
-    %h3= link_to "Artist", "#", :class => "artist"
+    %h2= link_to "{{nextTrack().title}}", "#", :class => "title"
+    %h3= link_to "{{nextTrack().artist}}", "#", :class => "artist"
 
     .controls
-      =link_to "Play", "#", :class => "play"
-      =link_to "Like", "#", :class => "like"
+      =link_to "Play", "", :class => "play", :"ng-click" => "playNext()"
+      =link_to "Like", "", :class => "like"
 
-%footer#controls
-  =link_to "Play", "#", :id => "play-current"
-  =link_to "Like", "#", :id => "like-current"
-  =link_to "Shuffle", "#", :id => "shuffle-current"
