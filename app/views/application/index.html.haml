@@ -1,4 +1,4 @@
-#player{:"ng-controller" => "PlayerCtrl"}
+#player{:"ng-controller" => "MixerApp.PlayerCtrl"}
 
   %aside#prev
 
@@ -8,7 +8,7 @@
     %h3= link_to "{{previousTrack().artist}}", "#", :class => "artist"
 
     .controls
-      =link_to "Play", "", :class => "play", :"ng-click" => "playPrevious()"
+      =link_to "Play", "", :class => "play", :"ng-click" => "playPreviousTrack()"
       =link_to "Like", "", :class => "like"
 
   %section#current
@@ -16,10 +16,10 @@
     %header Now Playing
 
     =link_to "#", :id => "track-image" do
-      = image_tag "https://i1.sndcdn.com/artworks-000020208116-tw81u0-t120x120.jpg?923db0b", :size => "130x130"
+      %img{:src => "{{currentTrack().image_url()}}", :size => "130x130", :alt => "{{currentTrack().title}} - {{currentTrack().artist}}"}
 
-    %h1=link_to "{{currentTrack.title}}", "#", :class => "title"
-    %h2=link_to "{{currentTrack.artist}}",  "#", :class => "artist"
+    %h1=link_to "{{currentTrack().title}}", "#", :class => "title"
+    %h2=link_to "{{currentTrack().artist}}",  "#", :class => "artist"
 
     %footer#controls
       =link_to "Play", "#", :id => "play-current"
@@ -34,6 +34,6 @@
     %h3= link_to "{{nextTrack().artist}}", "#", :class => "artist"
 
     .controls
-      =link_to "Play", "", :class => "play", :"ng-click" => "playNext()"
+      =link_to "Play", "", :class => "play", :"ng-click" => "playNextTrack()"
       =link_to "Like", "", :class => "like"
 

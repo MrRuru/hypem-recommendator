@@ -15,7 +15,9 @@
 
         <%= javascript_include_tag "modernizr" %>
         <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
-        <%= javascript_include_tag "player" %>
+
+        <!-- At the top because it is a js application -->
+        <%= javascript_include_tag "application" %>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -34,8 +36,6 @@
         <div id="container">
             <%= yield %>
         </div>
-
-        <%= javascript_include_tag "application" %>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

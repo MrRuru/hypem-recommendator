@@ -18,4 +18,7 @@
 //
 //= require turbolinks
 //
+//= require mixer_app
+//= require track
+//= require playlist
 //= require player
