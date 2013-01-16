@@ -44,7 +44,7 @@ gem 'turbolinks'
 gem 'ejs'
 
 # Twitter bootstrap generators with turbolink support
-gem 'twitter-bootstrap-turbo'
+# gem 'twitter-bootstrap-turbo'
 
 # Souncloud gem
 gem 'soundcloud'

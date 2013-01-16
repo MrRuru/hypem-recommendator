@@ -1,1 +1,0 @@
-SOUNDCLOUD = Soundcloud.new(:client_id => 'f8afa16ecbaaa97fde4b046b9ba331eb')
