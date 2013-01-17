@@ -5,6 +5,8 @@ class SoundcloudClient
   # The constants for the max page size and max offset for api queries
   MAX_PAGE_SIZE = 200
   MAX_OFFSET = 8000
+  DEFAULT_LIMIT = 20
+
 
   # Fetches a user data, and its favorites
   # Arguments:
@@ -12,7 +14,7 @@ class SoundcloudClient
   def user(id, opts = {})
     user = api.get("/users/#{id}")
 
-    limit = opts[:limit] || 20
+    limit = opts[:limit] || DEFAULT_LIMIT
 
     user.favorites = fetch_pages_for(limit) do |page|
       api.get("/users/#{id}/favorites", :limit => page[:limit], :offset => page[:offset])
@@ -25,10 +27,10 @@ class SoundcloudClient
   # Fetches a track, and the users who favorited it
   # Arguments:
   # - limit (default 20) : the number of favoriters to fetch
-  def track(id)
+  def track(id, opts = {})
     track = api.get("/tracks/#{id}")
 
-    limit = opts[:limit] || 20
+    limit = opts[:limit] || DEFAULT_LIMIT
 
     track.favorites = fetch_pages_for(limit) do |page|
       api.get("/tracks/#{id}/favoriters", :limit => page[:limit], :offset => page[:offset])
