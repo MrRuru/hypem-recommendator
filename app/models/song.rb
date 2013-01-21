@@ -33,4 +33,11 @@ class Song < RedisRecord
     user_ids.map{|user_id|User.new(user_id)}
   end
 
+  def self.import_from_soundcloud(sc_data)
+
+    # self.name = sc_data.username
+    # self.url = sc_data.permalink_url
+    # self.songs_count = sc_data.public_favorites_count
+  end
+
 end

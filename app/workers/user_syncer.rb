@@ -15,13 +15,10 @@ class UserSyncer < Syncer
   end
 
   # Performer
-  def fetch_from_hypem
-    logger.info "Syncing user #{id}"
+  def fetch_from_soundcloud
+    logger.info "Syncing user #{@id}"
   
-    hypem = Hypem.user(@id)
-    song_ids = hypem.loved_playlist.get.tracks.map{|song|song.media_id}
-  
-    user.playlist.sadd(song_ids)
+    user.sync_from_soundcloud!
     user.synced_at = Time.now
 
     # Sleeping a bit to not overcharge the queue

@@ -1,4 +1,8 @@
 # A wrapper for the soundcloud ruby client, with custom accessors
+# Returns hashes =>
+# User : id, name, url, favorites_count
+# Track : id, user_id, title, url, artwork_url, favoriters_count
+
 
 class SoundcloudClient
 
@@ -12,31 +16,33 @@ class SoundcloudClient
   # Arguments:
   # - limit (default 20) : the number of favorites to fetch
   def user(id, opts = {})
-    user = api.get("/users/#{id}")
-
-    limit = opts[:limit] || DEFAULT_LIMIT
-
-    user.favorites = fetch_pages_for(limit) do |page|
-      api.get("/users/#{id}/favorites", :limit => page[:limit], :offset => page[:offset])
-    end
-
-    return user
+    res = api.get("/users/#{id}")
+    return process_user(res)
   end
 
+
+  def user_favorites(user_id, opts={})
+    limit = opts[:limit] || DEFAULT_LIMIT
+
+    return fetch_pages_for(limit) do |page|
+      api.get("/users/#{user_id}/favorites", :limit => page[:limit], :offset => page[:offset]).map{|res|process_track(res)}
+    end
+  end
 
   # Fetches a track, and the users who favorited it
   # Arguments:
   # - limit (default 20) : the number of favoriters to fetch
   def track(id, opts = {})
-    track = api.get("/tracks/#{id}")
+    res = api.get("/tracks/#{id}")
+    return process_track(res)
+  end
 
+  def track_favoriters(track_id, opts = {})
     limit = opts[:limit] || DEFAULT_LIMIT
 
-    track.favorites = fetch_pages_for(limit) do |page|
-      api.get("/tracks/#{id}/favoriters", :limit => page[:limit], :offset => page[:offset])
+    return fetch_pages_for(limit) do |page|
+      api.get("/tracks/#{track_id}/favoriters", :limit => page[:limit], :offset => page[:offset]).map{|res|process_user(res)}
     end
-
-    return track
   end
 
 
@@ -85,5 +91,27 @@ class SoundcloudClient
     results = pages.map{|page| yield(page) }.flatten
     return results
   end
+
+
+  def process_user(res)
+    {
+      :id => res.id,
+      :name => res.username,
+      :url => res.permalink_url,
+      :favorites_count => res.public_favorites_count
+    }
+  end
+
+  def process_track(res)
+    {
+      :id => res.id,
+      :user_id => res.user_id,
+      :title => res.title,
+      :url => res.permalink_url,
+      :artwork_url => res.artwork_url,
+      :favoriters_count => res.favoritings_count
+    }
+  end
+
 
 end

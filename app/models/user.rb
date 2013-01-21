@@ -25,5 +25,13 @@ class User < RedisRecord
   def songs
     song_ids.map{|song_id|Song.new(song_id)}
   end
-  
+
+  def sync_from_soundcloud!
+    sc_data = SoundcloudClient.user(self.id)
+
+    self.name = sc_data.username
+    self.url = sc_data.permalink_url
+    self.songs_count = sc_data.public_favorites_count  
+  end
+
 end

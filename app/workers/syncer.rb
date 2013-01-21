@@ -12,7 +12,7 @@ class Syncer < BaseWorker
     if perform? || self.force
 
       begin
-        fetch_from_hypem
+        fetch_from_soundcloud
       rescue => e
         # Re-enqueue self when 403 response
         if e.message.match /403/

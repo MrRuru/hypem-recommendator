@@ -27,7 +27,7 @@ class Crawler < BaseWorker
     # If not already crawled for this depth and depth > 0
     if !self.object.crawled?(depth)
 
-      # If there remain uncrawled children ,crawl them and quit
+      # If there remain uncrawled children, crawl them and quit
       uncrawled_children = self.children.select{|child| !child.crawled?(depth-1)}
 
       if depth > 0 && !uncrawled_children.empty?
