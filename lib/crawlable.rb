@@ -2,19 +2,33 @@ module Crawlable
   
   def self.extended(base)
     base.instance_eval do 
-      has_attributes :crawl_dates_serialized # Array of crawl date by depth
+      has_attributes :crawl_dates_serialized, # Array of crawl date by depth
+                     :children_synced_at # Last children sync date
     end
   end
 
   def is_crawlable_with(opts)
     crawler = opts[:crawler]
+    children_syncer = opts[:children_syncer]
     default_depth = opts[:default_depth]
     expiration = opts[:expiration]
     
     define_method :crawled? do |depth|
       !!crawl_dates[depth] && ( crawl_dates[depth] > ( Time.now - expiration ) )      
     end
-    
+
+
+    # TODO : make syncable handle this (?) => need to find a way to inject the namespace in base.extend()
+    define_method :children_synced? do
+      !!children_synced_at && ( Time.parse(children_synced_at) > (Time.now - expiration))
+    end
+
+    define_method :sync_children! do |opts = {}|
+      Resque.enqueue(children_syncer, {"id" => self.id}.merge(opts))
+    end
+    # END
+
+
     define_method :crawl! do |opts = {}|
       depth ||= default_depth
       Resque.enqueue(crawler, {:depth => default_depth}.merge(opts).merge({:id => self.id}))

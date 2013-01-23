@@ -18,26 +18,39 @@ class Crawler < BaseWorker
   # Core logic
   def perform
   
-    # If unsynced, sync it
+    # Check that we are synced. Transfer to syncer if not the case
     if !self.object.synced?
       self.object.sync!(:callback => self.to_callback)
       return
     end
-    
-    # If not already crawled for this depth and depth > 0
+
+
+    # Check that our children are synced. Transfer to the syncer if not the case
+    if !self.object.children_synced?
+      self.object.sync_children!(:callback => self.to_callback)
+      return
+    end
+
+
+    # Then check if we are crawled for this depth. If yes, then we can skip this next step
+    # and directly forward to our callback.
     if !self.object.crawled?(depth)
 
-      # If there remain uncrawled children, crawl them and quit
-      uncrawled_children = self.children.select{|child| !child.crawled?(depth-1)}
+      # Now there are 3 possible cases :
+      # - the depth is 0 : there are no children to crawl, so we can safely set our crawl timestamp and continue
+      # - all our children are crawled for depth - 1 : it means that we are crawled for depth and that we can also set our timestamp and continue
+      # - some of our children are still uncrawled for depth - 1 : we call them with ourself as the callback and EXIT
+      uncrawled_children = (depth > 0) ? self.children.select{|child| !child.crawled?(depth-1)} : []
 
-      if depth > 0 && !uncrawled_children.empty?
+      if !uncrawled_children.empty?
         uncrawled_children.each do |child|
           child.crawl! :callback => self.to_callback, :depth => (depth - 1)
         end
-        return #does it exit all of the task ??
+
+        return # exit this all task, we will be back since we included ourselves as a callback
       
-      # Otherwise we can officially set the crawl on the current element
       else
+        # Set our timestamp
         self.object.set_crawled_at(depth)
       end
 

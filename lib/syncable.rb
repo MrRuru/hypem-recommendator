@@ -9,7 +9,7 @@ module Syncable
   def is_syncable_with(opts)
     syncer = opts[:syncer]
     expiration = opts[:expiration]
-    
+
     define_method :synced? do
       !!synced_at && ( Time.parse(synced_at) > (Time.now - expiration))
     end
@@ -19,5 +19,4 @@ module Syncable
     end
   end
 
-  
 end

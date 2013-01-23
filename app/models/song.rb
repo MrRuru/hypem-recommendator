@@ -13,31 +13,34 @@ class Song < RedisRecord
   is_crawlable_with(
     :expiration => 1.day,
     :default_depth => 2, # Enough to get one-level recommendations
-    :crawler => SongCrawler
+    :crawler => SongCrawler,
+    :children_syncer => SongFavoritersSyncer
   )
   
   # Attributes
-  has_attributes :recommendations,
-                 :recommendations_built_at,
-                 :artist,
-                 :title
+  has_attributes :uploader_id,
+                 :title,
+                 :url,
+                 :artwork_url,
+                 :favoriters_count
 
-  has_associated :favorites
+  has_associated :favoriters
 
 
   def user_ids
-    favorites.exists ? favorites.smembers : []
+    favoriters.exists ? favoriters.smembers : []
   end
   
   def users
     user_ids.map{|user_id|User.new(user_id)}
   end
 
-  def self.import_from_soundcloud(sc_data)
+  def uploader
+    self.uploader_id ? User.new(self.uploader_id) : nil
+  end
 
-    # self.name = sc_data.username
-    # self.url = sc_data.permalink_url
-    # self.songs_count = sc_data.public_favorites_count
+  def set_attributes(opts)
+    throw "TO DEFINE IN REDIS_RECORD"
   end
 
 end
