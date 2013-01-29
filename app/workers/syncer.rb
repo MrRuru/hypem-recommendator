@@ -44,7 +44,7 @@ class Syncer < BaseWorker
   end
   
   # Actual hypem fetching, defined in subclasses
-  def fetch_from_hypem
+  def fetch_from_soundcloud
     throw "Cannot fetch untyped data. Please precise wether a song or a user should be fetched"
   end
   

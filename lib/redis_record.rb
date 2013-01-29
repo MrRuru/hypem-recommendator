@@ -39,6 +39,18 @@ class RedisRecord
     end 
   end
 
+  # Mass attributes assignment
+  def set_attributes(attributes)
+    attributes.each do |key, value|
+      # Checking the method exists
+      if self.respond_to? :"#{key}="
+        self.send :"#{key}=", value
+      else
+        throw "Cannot set undefined attribute #{key} on #{self}"
+      end
+    end
+  end
+
   def self.has_associated(*fields)
     fields.each do |field_id|
       

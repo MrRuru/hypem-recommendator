@@ -25,11 +25,6 @@ class SongSyncer < Syncer
 
     # Assigning it to the song
     song.set_attributes(sc_data)
-    # song.uploader_id      = sc_data[:user_id]
-    # song.title            = sc_data[:title]
-    # song.url              = sc_data[:url]
-    # song.artwork_url      = sc_data[:artwork_url]
-    # song.favoriters_count = sc_data[:favoriters_count]
 
     throw "SYNC THE UPLOADER"
 

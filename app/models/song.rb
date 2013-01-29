@@ -39,8 +39,4 @@ class Song < RedisRecord
     self.uploader_id ? User.new(self.uploader_id) : nil
   end
 
-  def set_attributes(opts)
-    throw "TO DEFINE IN REDIS_RECORD"
-  end
-
 end

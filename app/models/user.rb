@@ -33,8 +33,4 @@ class User < RedisRecord
     song_ids.map{|song_id|Song.new(song_id)}
   end
 
-  def set_attributes(opts)
-    throw "TO DEFINE IN REDIS_RECORD"
-  end
-
 end
