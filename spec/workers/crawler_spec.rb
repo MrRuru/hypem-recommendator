@@ -36,6 +36,25 @@ describe Crawler do
                 
     end
     
+    it "should sync the children" do
+      @song.synced_at = Time.now
+      @song.synced?.should be_true
+      @song.children_synced?.should be_false
+      @song.crawled?(depth).should be_false
+
+      # Launch a children sync with itself (and its callback) as a callback
+      @song.should_receive(:sync_children!).with(:callback => crawler.to_callback)
+
+      # Do not launch its callback
+      crawler.callback.should_not_receive(:call)
+    
+      crawler.perform
+
+      # Its flag should not be set
+      @song.crawled?(depth).should be_false
+                
+    end
+
   end
   
   describe "with a synced but uncrawled object" do
@@ -45,6 +64,10 @@ describe Crawler do
       # Setting up and checking the data
       @song.synced_at = Time.now      
       @song.synced?.should be_true
+
+      @song.children_synced_at = Time.now      
+      @song.children_synced?.should be_true
+
       @song.crawled?(depth).should be_false
 
     end
@@ -97,6 +120,10 @@ describe Crawler do
       # Setting up the data
       @song.synced_at = Time.now      
       @song.synced?.should be_true
+
+      @song.children_synced_at = Time.now      
+      @song.children_synced?.should be_true
+
       @song.crawled?(depth).should be_false
       
       users = []
@@ -126,6 +153,7 @@ describe Crawler do
       
       # Setting up the data
       @song.stub!(:synced?).and_return(true)
+      @song.stub!(:children_synced?).and_return(true)
       @song.stub!(:crawled?).and_return(true)
       
       # Call its callback
