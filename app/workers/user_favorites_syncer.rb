@@ -28,13 +28,18 @@ class UserFavoritesSyncer < Syncer
       song = Song.new(song_sc_data[:id])
       song.set_attributes(song_sc_data)
 
-      throw "HANDLE THE UPLOADER"
+      # If no uploader set, sync it and callback to itself
+      unless song.uploader.synced?
+        song.uploader.sync!(:callback => self.to_callback)
+        return
+      end
+      # Else continue
 
       song.synced_at = Time.now
     end
 
     # Saving the favorites
-    throw "TODO"
+    user.favorites.sadd(sc_data.map{|song_sc_data|song_sc_data[:id]})
 
     # Setting the children_synced_at timestamp
     user.children_synced_at = Time.now

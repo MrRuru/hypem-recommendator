@@ -105,7 +105,7 @@ class SoundcloudClient
   def process_track(res)
     {
       :id => res.id,
-      :user_id => res.user_id,
+      :uploader_id => res.user_id,
       :title => res.title,
       :url => res.permalink_url,
       :artwork_url => res.artwork_url,

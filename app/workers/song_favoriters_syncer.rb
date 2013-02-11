@@ -31,7 +31,7 @@ class SongFavoritersSyncer < Syncer
     end
 
     # Saving the favorites
-    throw "TODO"
+    song.favoriters.sadd(sc_data.map{|user_sc_data|user_sc_data[:id]})
 
     # Setting the children_synced_at timestamp
     song.children_synced_at = Time.now

@@ -26,7 +26,12 @@ class SongSyncer < Syncer
     # Assigning it to the song
     song.set_attributes(sc_data)
 
-    throw "SYNC THE UPLOADER"
+    # If no uploader set, sync it and callback to itself
+    unless song.uploader.synced?
+      song.uploader.sync!(:callback => self.to_callback)
+      return
+    end
+    # Else continue
 
     # Updating the synced_at timestamp
     song.synced_at = Time.now

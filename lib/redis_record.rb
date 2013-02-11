@@ -17,12 +17,6 @@ class RedisRecord
     end
   end
             
-  private
-
-  def redis
-    @@redis ||= REDIS
-  end
-
 
   # The fields are either in the hash or separate redis entries
   def self.has_attributes(*attributes)
@@ -59,6 +53,13 @@ class RedisRecord
       end
       
     end
+  end
+
+
+  private
+
+  def redis
+    @@redis ||= REDIS
   end
 
 end
