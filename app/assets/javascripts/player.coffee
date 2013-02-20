@@ -1,23 +1,70 @@
 # This controller is handling user inputs
 
-MixerApp.PlayerCtrl = ($scope) ->
+# angular.module 'playerServices', [], ($provide) ->
 
-  # Bootstrapping the playlist, maybe to put in another place
-  MixerApp.Playlist.bootstrap()
+#   $provide.factory 'playlist', [$q], ($q) ->
+#     deferred = $q.defer()
+#     MixerApp.Playlist.bootstrap () ->
+#       deferred.resolve this
+#     deferred.promise
 
-  $scope.index = 1
+Mixer.App
 
-  $scope.currentTrack = -> 
-    MixerApp.Playlist.get($scope.index)
+  # Playlist handler
+  .factory 'Playlist', ($rootScope, $q) ->
+    {
+      initialize: () ->
+        # TODO : initialize/ reset / get method instead
+        Mixer.Playlist.bootstrap () =>
+          # Broadcast in an apply because not called in a controller
+          $rootScope.$apply () =>
+            @index = 0
+            $rootScope.$broadcast('changeTrack')
 
-  $scope.previousTrack = -> 
-    MixerApp.Playlist.get($scope.index - 1)
+      shuffle: () ->
+        Mixer.Playlist.bootstrap () =>
+          $rootScope.$apply () =>
+            # Shuffling goes here instead of index change
+            @index = 1
+            $rootScope.$broadcast('changeTrack')
 
-  $scope.nextTrack = -> 
-    MixerApp.Playlist.get($scope.index + 1)
+      current: () ->
+        @get(0)
 
-  $scope.playPreviousTrack = ->
-    $scope.index = $scope.index - 1
+      get: (delta) ->
+        index = @index + delta
+        track = Mixer.Playlist.get(index)
+        track
 
-  $scope.playNextTrack = ->
-    $scope.index = $scope.index + 1
+      previous: () ->
+        @index = @index - 1
+        $rootScope.$broadcast('changeTrack')
+
+      next: () ->
+        @index = @index + 1
+        $rootScope.$broadcast('changeTrack')
+    }
+
+  # App initialization
+  .run (Playlist) ->
+    console.log "initializing app"
+    Playlist.initialize()
+
+  # Playlist controller
+  .controller 'PlayerCtrl', ($scope, Playlist) ->
+
+    $scope.$on 'changeTrack', (e) ->
+      $scope.currentTrack = Playlist.current()
+      $scope.previousTrack = Playlist.get(-1)
+      $scope.nextTrack = Playlist.get(1)
+
+    $scope.playPreviousTrack = ->
+      Playlist.previous()
+
+    $scope.playNextTrack = ->
+      Playlist.next()
+
+    $scope.shufflePlaylist = ->
+      Playlist.shuffle()
+
+# MixerApp.PlayerCtrl.$inject ['$playlist']

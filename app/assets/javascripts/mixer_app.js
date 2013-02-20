@@ -1,2 +1,4 @@
 // Global namespace
-window.MixerApp = {};
+window.Mixer = {
+  App: angular.module('MixerApp', [])
+};

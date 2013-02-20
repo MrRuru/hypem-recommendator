@@ -1,6 +1,6 @@
 # This model is a wrapper for the api responses
 
-class MixerApp.Track
+class Mixer.Track
   constructor: ({@title, @artist}) ->
 
   image_url: () ->

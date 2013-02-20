@@ -1,11 +1,11 @@
-#player{:"ng-controller" => "MixerApp.PlayerCtrl"}
+#player{:"ng-controller" => "PlayerCtrl"}
 
   %aside#prev
 
     %header Prev
 
-    %h2= link_to "{{previousTrack().title}}", "#", :class => "title"
-    %h3= link_to "{{previousTrack().artist}}", "#", :class => "artist"
+    %h2= link_to "{{previousTrack.title}}", "#", :class => "title"
+    %h3= link_to "{{previousTrack.artist}}", "#", :class => "artist"
 
     .controls
       =link_to "Play", "", :class => "play", :"ng-click" => "playPreviousTrack()"
@@ -16,22 +16,22 @@
     %header Now Playing
 
     =link_to "#", :id => "track-image" do
-      %img{:src => "{{currentTrack().image_url()}}", :size => "130x130", :alt => "{{currentTrack().title}} - {{currentTrack().artist}}"}
+      %img{:src => "{{currentTrack.image_url()}}", :width => "130", :height => "130", :alt => "{{currentTrack.title}} - {{currentTrack.artist}}"}
 
-    %h1=link_to "{{currentTrack().title}}", "#", :class => "title"
-    %h2=link_to "{{currentTrack().artist}}",  "#", :class => "artist"
+    %h1=link_to "{{currentTrack.title}}", "#", :class => "title"
+    %h2=link_to "{{currentTrack.artist}}",  "#", :class => "artist"
 
     %footer#controls
       =link_to "Play", "#", :id => "play-current"
       =link_to "Like", "#", :id => "like-current"
-      =link_to "Shuffle", "#", :id => "shuffle-current"
+      =link_to "Shuffle", "", :id => "shuffle-current", :"ng-click" => "shufflePlaylist()"
 
   %aside#next
 
     %header Next
 
-    %h2= link_to "{{nextTrack().title}}", "#", :class => "title"
-    %h3= link_to "{{nextTrack().artist}}", "#", :class => "artist"
+    %h2= link_to "{{nextTrack.title}}", "#", :class => "title"
+    %h3= link_to "{{nextTrack.artist}}", "#", :class => "artist"
 
     .controls
       =link_to "Play", "", :class => "play", :"ng-click" => "playNextTrack()"
