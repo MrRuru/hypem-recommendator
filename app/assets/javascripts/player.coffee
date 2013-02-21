@@ -61,7 +61,10 @@ Mixer.App
         @sound && @sound.unload()
         SC.stream ("/tracks/" + track_id), (sound) =>
           @sound = sound
-          @sound.play()
+          @sound.play {
+            onfinish: () ->
+              $rootScope.$broadcast('trackFinished')
+          }          
 
       resume: () ->
         console.log 'resuming playback'
@@ -90,10 +93,12 @@ Mixer.App
       $scope.$apply () ->
         $scope.updateTracks()
 
-
     $scope.$on 'changeTrack', (e) ->
       $scope.updateTracks()
       SoundcloudPlayer.play $scope.currentTrack.id
+
+    $scope.$on 'trackFinished', (e) ->
+      $scope.playNextTrack()
 
 
     $scope.$watch 'playing', (new_status, old_status) ->
