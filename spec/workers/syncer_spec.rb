@@ -2,7 +2,9 @@ require 'spec_helper'
 
 describe SongSyncer do
   
-  pending "redo for soundcloud"
+  REDIS.client.db.should == 1
+  
+  # pending "redo for soundcloud"
 
   # # let(:id) {random_string}
   # let(:id){ "1mahm" }

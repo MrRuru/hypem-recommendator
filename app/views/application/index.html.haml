@@ -22,7 +22,12 @@
     %h2=link_to "{{currentTrack.artist}}",  "#", :class => "artist"
 
     %footer#controls
-      =link_to "Play", "#", :id => "play-current"
+      =link_to "", :id => "play-current", :"ng-click" => "togglePlay()" do
+        %span{:"ng-switch" => "", :on => "playing"}
+          %span{:"ng-switch-when" => "playing"}  Pause
+          %span{:"ng-switch-when" => "paused"} Resume
+          %span{:"ng-switch-when" => "stopped"} Play
+
       =link_to "Like", "#", :id => "like-current"
       =link_to "Shuffle", "", :id => "shuffle-current", :"ng-click" => "shufflePlaylist()"
 

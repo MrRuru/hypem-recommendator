@@ -71,7 +71,7 @@ RSpec.configure do |config|
 
   # Clearing the data before each spec
   config.before :each do
-    REDIS.flushall
+    REDIS.flushdb
     ResqueSpec.reset!
   end
 

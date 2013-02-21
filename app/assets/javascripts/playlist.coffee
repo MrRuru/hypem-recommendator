@@ -13,14 +13,17 @@ Mixer.Playlist = {
           {
             title: "Zeds Dead - No Prayers"
             artist: "Thissongissick.com"
+            id: '40289362'
           },
           {
             title: "Sir Sly - Gold"
             artist: "Sir Sly"
+            id: '63392244'
           },
           {
             title: "Ratatat - Loud Pipes"
             artist: "Fatlicious!"
+            id: '29462796'
           }
         ], (obj) -> new Mixer.Track(obj)
 
